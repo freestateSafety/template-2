@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+body {
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: 'Roboto',sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto',sans-serif;
+    font-weight: 700;
+    line-height: 1em;
+    margin-bottom: .5em;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.4rem; }
+h4 { font-size: 1.2rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 1rem;  }
+
+.size-h1 { font-size: 2rem; }
+.size-h2 { font-size: 1.6rem; }
+.size-h3 { font-size: 1.4rem;  }
+.size-h4 { font-size: 1.2rem; }
+.size-h5 { font-size: 1.1rem; }
+.size-h6 { font-size: 1rem; }
+
+p { font-size: 1em; line-height: 1.2em; margin: 0; margin-bottom: 1em; }
+b { font-weight:700;}
+
+.subhead{font-weight:bold; margin-bottom:1em;}
+
+.transform-uppercase {text-transform: uppercase }
+.transform-lowercase {text-transform: lowercase }
+.transform-initial {text-transform: initial }

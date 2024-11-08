@@ -1,0 +1,5 @@
+# www.robotstxt.org/
+# This robots.txt file controls crawling of URLs under https://freestatesafety.com.
+
+User-agent: *
+Disallow:

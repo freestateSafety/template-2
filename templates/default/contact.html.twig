@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+    <div class="content-internal  ">
+        
+        <h1 class="space_xs_m-b-lg">Contact Us</h1>
+
+        <div id="ContactUs" class="flex-grid flex-justify-start flex-align-start  ">
+
+            <div class="flex-grid__col-xs-12 flex-grid__col-md-5  space_xs_m-b-xl">
+
+                <h2 class="size-h3">Address</h2>
+                <div itemscope itemtype="http://schema.org/Store" class="space_xs_m-b-lg">
+
+                    <div itemprop="name">
+                        {{ site.name }}
+                    </div>
+                    <address itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                        <div itemprop="postOfficeBoxNumber">{{ site.street }}</div>
+                        <div>
+                            <span itemprop="addressLocality">{{site.city}}</span>, 
+                            <span itemprop="addressRegion">{{site.state}}</span> 
+                            <span itemprop="postalCode">{{site.zip}}</span>
+                        </div>
+                        <div><span itemprop="addressCountry">US</span></div>
+                    </address>
+                </div>
+
+                <h2 class="size-h6">Phone Number</h2>
+                
+                <div itemscope itemtype="http://schema.org/Store" class="space_xs_m-b-lg">
+                    <span itemprop="telephone" content="+{{site.ph_short}}">
+                        {{site.phone}}
+                    </span>
+                </div>
+
+                <h2 class="size-h6">Hours</h2>
+                <div itemscope itemtype="http://schema.org/Store" class="space_xs_m-b-lg">
+                    <div>
+                        <time itemprop="openingHours" datetime="Mo-Fr 08:00-17:00">
+                            Monday - Friday<br>8:00 am - 5:00 pm (Central Time)
+                        </time>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ContactForm" class="flex-grid__col-xs-12 flex-grid__col-md-7">
+                
+                <h2 class="size-h3">Email Form</h2>
+
+                {% if error is defined %}
+                    <div id="errorBlock" class="error">{{ error }}</div>
+                {% endif %}
+                <form action="{{ path('contact') }}" name="contact" id="contact" method="post">
+
+                    <div class="form-row">
+                        <label for="contact_name">Name<span class="exclaim">*</span></label>
+                        <div class="form-input">{{ form_widget(form.name) }}</div>
+                    </div>
+                    <div class="form-row">
+                        <label for="contact_email">Email Address<span class="exclaim">*</span></label>
+                        <div class="form-input">{{ form_widget(form.email) }}</div>
+                    </div>
+                    <div class="form-row">
+                        <label for="contact_phone">Phone</label>
+                        <div class="form-input">{{ form_widget(form.phone) }}</div>
+                    </div>
+                    <div class="form-row">
+                        <label for="contact_company">Company </label>
+                        <div class="form-input">{{ form_widget(form.company) }}</div>
+                    </div>
+                    <div class="form-row">
+                        <label for="contact_comments">Comments<span class="exclaim">*</span></label>
+                        <div class="form-input">{{ form_widget(form.comments) }}</div>
+                    </div>
+
+                    <div class="form-row">
+
+                        <button type="submit" class="button" name="submitBtn" id="submitBtn">Send</button>
+
+                    </div>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+   
+
+{% endblock %}

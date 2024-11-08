@@ -1,0 +1,102 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+
+    <div id="contentInternal" class="content-internal admin">
+
+        <h1>Site Administration</h1>
+        <p class="space_xs_m-b-xl">Select an area of the site to administer.</p>
+
+        <h2 class="adminHeading">Manage Orders</h2>
+
+        <div class="admin-area space_xs_m-b-lg flex-grid-gap ">
+
+            <div id="orders-active" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_orders_active') }}">
+                    <h4 class="heading">Active Orders</h4>
+                    <div class="content">View and fulfill orders currently in the system</div>
+                </a>
+            </div>
+            <div id="orders-fulfilled" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_orders_fulfilled') }}">
+                    <h4 class="heading">Fulfilled Orders</h4>
+                    <div class="content">View orders that have already been fulfilled</div>
+                </a>
+            </div>
+            <div id="orders-deleted" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_orders_deleted') }}">
+                    <h4 class="heading">Orders Deleted</h4>
+                    <div class="content">View orders marked as deleted</div>
+                </a>
+            </div>
+        </div>
+
+        <h2 class="adminHeading">Manage Products</h2>
+
+        <div class="admin-area space_xs_m-b-lg flex-grid-gap  ">
+            <div id="product-admin" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_products') }}">
+                    <h4 class="heading">Products</h4>
+                    <div class="content">Manage all products in the database</div>
+                </a>
+            </div>
+            <div id="category-admin" class="area flex-gap__col-xs-12  flex-gap__col-md-4 ">
+                <a href="{{ path('admin_products_categories') }}">
+                    <h4 class="heading">Categories</h4>
+                    <div class="content">Manage the categories and subcategories for products</div>
+                </a>
+            </div>
+            
+            <div id="material-admin" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_materials') }}">
+                    <h4 class="heading">Materials</h4>
+                    <div class="content">Manage the various product materials</div>
+                </a>
+            </div>
+
+            <div id="material-admin" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_pricing') }}">
+                    <h4 class="heading">Pricing Tables</h4>
+                    <div class="content">Manage the product pricing tables</div>
+                </a>
+            </div>
+
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div id="logins-admin" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                    <a href="{{ path('admin_products_manage') }}">
+                        <h4 class="heading">Download/Upload Database</h4>
+                        <div class="content">Allows management of products on your computer</div>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <h2 class="adminHeading">Other Areas to Manage</h2>
+
+        <div class="admin-area space_xs_m-b-lg  flex-grid-gap ">
+
+            <div id="customer-admin" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_customer') }}">
+                    <h4 class="heading">Customers</h4>
+                    <div class="content">Add/Edit/Delete customer information</div>
+                </a>
+            </div>
+            <div id="banner-admin" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_banner') }}">
+                    <h4 class="heading">Images</h4>
+                    <div class="content">Update monthly ad banner on the home page</div>
+                </a>
+            </div>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <div id="logins-admin" class="area flex-gap__col-xs-12  flex-gap__col-md-4">
+                <a href="{{ path('admin_customer_role') }}">
+                    <h4 class="heading">Logins</h4>
+                    <div class="content">Manage logins to the admin tool</div>
+                </a>
+            </div>
+            {% endif %}
+            
+        </div>
+
+    </div>
+{% endblock %}

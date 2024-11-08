@@ -1,0 +1,37 @@
+
+.hidden{ display: none !important; }
+
+.t-align-center { text-align: center; }
+.t-align-right { text-align: right; }
+.t-align-left { text-align: left; }
+
+.float-l { float:left; }
+.float-r { float:right; }
+.clear { clear: both; }
+
+.noVertScroll{ height:100vh !important; overflow-y:hidden !important; overflow-x:hidden !important; }
+
+.flex-nav-horiz {
+    list-style-type: none; 
+    display: flex; 
+    flex-direction: row;
+    align-items: center;
+}
+.nowrap { white-space: nowrap; }
+
+.display-inline { display: inline; }
+.display-inline-block { display: inline-block; }
+.display-block { display: block; }
+
+
+.show-in-mobile { display: block; }
+@media screen and (min-width: 551px){
+    .show-in-mobile { display: none; }
+}
+
+.width-auto {
+    width: auto;
+}
+.margin-auto {
+    margin: auto;
+}

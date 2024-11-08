@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal">
+
+        <div class="login-form">
+
+            <h3>Please Login</h3>
+            <p>Enter your username and password in the fields below.</p>
+
+            {% if error %}<div class=error>{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
+
+
+            <div id="loginBlock">
+                {% if app.session.get('loginFailure', 0) >= 3 %}
+                    <div style="margin-bottom:1em;">
+                        <div class="inline-error">WARNING {{ app.session.get('loginFailure') }} of 5 login attempts left</div>
+                        <div>
+                            If you feel like you have forgotten your password, please use our
+                            <a href="{{ path('forgot_password') }}">forgot my password</a> form to recover your password.
+                        </div>
+                    </div>
+                {% endif %}
+                <form name="form" action="{{ path('login') }}" method="post">
+                    <div class="space_xs_m-b-md">
+                        <label><b>Userame</b></label>
+                        <input type="text" name="_username" value="{{ username }}">
+                    </div>
+                    <div class="space_xs_m-b-md">
+                        <label><b>Password</b></label>
+                        <input type="password" name="_password" value="">
+                    </div>
+                    <div class="space_xs_m-b-md">
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="1" class="space_xs_m-r-sm">
+                        <label for="remember_me" class="display-inline-block">Keep me logged in</label>
+                    </div>
+                    <div class="space_xs_m-b-md">
+                        <button type="submit" id="submit" name="submit" class="button btnSubmit">Login</button>
+                    </div>
+
+                    <div class="space_xs_m-b-md">
+                        <p>
+                            <a id="forgot" href="{{ path('forgot_password') }}" class="smallLink">I forgot my password</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+
+    </div>
+{% endblock %}

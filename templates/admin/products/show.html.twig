@@ -1,0 +1,234 @@
+{% extends 'admin/products/base.html.twig' %}
+
+{% block admin_body %}
+    {{ form_start(productForm) }}
+        {{ form_widget(productForm._token) }}
+
+        <div class="error">{{ form_errors(productForm) }}</div>
+
+        <table class="adminDetailTable" width="100%" border="0" cellpadding="0" cellspacing="0">
+            <colgroup>
+                <col width="">
+                <col width="45%">
+                <col width="40%">
+            </colgroup>
+
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">{{ form_label(productForm.name) }}</td>
+                <td colspan="2" class="bkg-color-gray-lightest">
+                    {{ form_widget(productForm.name, {'attr': {'style': 'width: 80%'}}) }}
+                    {{ form_errors(productForm.name) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black">Category</td>
+                <td colspan="2" class="bkg-color-gray-lightest">
+                    {{ form_widget(productForm.category) }}
+                    {{ form_errors(productForm.category) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Sub Category</td>
+                <td colspan="2" class="bkg-color-gray-lightest">
+                    {{ form_widget(productForm.productCategory) }}
+                    {{ form_errors(productForm.productCategory) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Material</td>
+                <td colspan="2" class="bkg-color-gray-lightest">
+                    <div id="selectMaterialBlock">{{ form_widget(productForm.material, {'attr': {'style': 'width: auto'}}) }}</div>
+                    {{ form_errors(productForm.material) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Item Number</td>
+                <td class="bkg-color-gray-lightest">{{ form_widget(productForm.itemNumber, {'attr': {'style': 'width: 90%'}}) }}</td>
+                <td rowspan="7" align="center" id="prodImageTD"  class="bkg-color-gray-lighter">
+                    <div id="prodImageCont">
+                        <div class="error">{{ form_errors(productForm.image) }}</div>
+                        {% if product.image %}
+                        <p><img src="{{ asset('uploads/products/' ~ image) }}"></p>
+                        {% else %}
+                        <p>No image currently available</p>
+                        {% endif %}
+                        <br><br><div id="imgBtns">{{ form_widget(productForm.image) }}</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Item Size</td>
+                <td class="bkg-color-gray-lightest">
+                    {{ form_widget(productForm.size, {'attr': {'style': 'width: 90%'}}) }}
+                    {{ form_errors(productForm.size) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Item Shape</td>
+                <td class="bkg-color-gray-lightest">
+                    {{ form_widget(productForm.shape, {'attr': {'style': 'width: 90%'}}) }}
+                    {{ form_errors(productForm.shape) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Item Weight</td>
+                <td class="bkg-color-gray-lightest">
+                    {{ form_widget(productForm.weight, {'attr': {'style': 'width: 90%'}}) }}
+                    {{ form_errors(productForm.weight) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Package Qty</td>
+                <td class="bkg-color-gray-lightest">
+                    {{ form_widget(productForm.quantity, {'attr': {'style': 'width: 90%'}}) }}
+                    {{ form_errors(productForm.quantity) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Class</td>
+                <td class="bkg-color-gray-lightest">
+                    {{ form_widget(productForm.class, {'attr': {'style': 'width: 90%'}}) }}
+                    {{ form_errors(productForm.class) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Description</td>
+                <td class="bkg-color-gray-lightest">
+                    <textarea id="Notes" name="Notes" style="width:90%;height:58px;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter color-black ">Notes</td>
+                <td class="bkg-color-gray-lightest" colspan="2">
+                    {{ form_widget(productForm.notes, {'attr': {'style': 'width: 100%; height: 100px;'}}) }}
+                    {{ form_errors(productForm.notes) }}
+                </td>
+            </tr>
+            <tr>
+                <td class="bkg-color-gray-lighter"></td>
+                <td colspan="2" class="bkg-color-gray-lighter">
+                    <button type="submit" class="button btnSubmit">Save</button>
+                    {% if product.id %}
+                    <button type="button" id="delete" class="button button-secondary">Delete</button>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    {{ form_end(productForm) }}
+    {% if product.id %}
+
+    <br>
+
+    <h2>Pricing Fields</h2>
+    <table id="pricing" class="adminPricingTable" border="0" cellpadding="0" cellspacing="0">
+        <tr id="blank" class="hidden" data-save-action="{{ path('admin_products_quantities_create') }}"
+            data-save-method="POST">
+            <td class="bkg-color-gray-lighter ">Group Name</td>
+            <td class="bkg-color-gray-lightest"><input type="text" name="label" size="15" value="" class="t11k"></td>
+            <td class="bkg-color-gray-lighter ">Quantity</td>
+            <td class="bkg-color-gray-lightest"><input type="number" name="quantity" size="15" value="" class="t11k"></td>
+            <td class="bkg-color-gray-lighter ">Price</td>
+            <td class="bkg-color-gray-lightest"><input type="text" name="price" size="15" value="" class="t11k"></td>
+            <td class="bkg-color-gray-lighter ">
+                <button type="button" class="save small-button"><span class="fa fa-save"></span></button>
+                <button type="button" class="delete small-button"><span class="fa fa-trash"></span></button>
+            </td>
+        </tr>
+        {% for quantity in product.quantities %}
+            <tr data-id="{{ quantity.id }}"
+                data-save-action="{{ path('admin_products_quantities_save', {id: quantity.id}) }}"
+                data-save-method="PUT">
+                <td class="bkg-color-gray-lighter ">Group Name</td>
+                <td class="bkg-color-gray-light"><input type="text" name="label" size="15" value="{{ quantity.label }}" class="t11k"></td>
+                <td class="bkg-color-gray-lighter ">Quantity</td>
+                <td class="bkg-color-gray-light"><input type="number" name="quantity" size="15" step="1" value="{{ quantity.quantity }}" class="t11k"></td>
+                <td class="bkg-color-gray-lighter ">Price</td>
+                <td class="bkg-color-gray-light"><input type="number" name="price" size="15" step="0.01" value="{{ quantity.price }}" class="t11k"></td>
+                <td class="bkg-color-gray-lighter ">
+                    <button type="button" class="save small-button"><span class="fa fa-save"></span></button>
+                    <button type="button" class="delete small-button"
+                            data-delete="{{ path('admin_products_quantities_delete', {id: quantity.id}) }}">
+                        <span class="fa fa-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr id="buttons" class="bkg-color-gray-lighter">
+            <td colspan="7" class="right">
+                <button type="button" id="add" class="button button-primary">Add</button>
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+    <script type="text/javascript">
+        (function ($) {
+            $('#add').click(function () {
+                var row = $('#blank').clone();
+                $(row).removeClass('hidden').removeAttr('id');
+                $('#buttons').before(row);
+                $('#add').attr('disabled', '');
+            });
+
+            $('#pricing').on('click', '.delete', function () {
+                if (confirm('Are you sure you want to remove this pricing row?')) {
+                    if ($(this).data('delete')) {
+                        var form = $('<form></form>').attr('method', 'post').attr('action', $(this).data('delete'))
+                                .html($('<input>').attr('name', '_method').val('DELETE'));
+                        $(document.body).append(form);
+                        $(form).submit();
+                    } else {
+                        // new row, not saved, just remove it
+                        $(this).parent().parent().remove();
+                        $('#add').removeAttr('disabled');
+                    }
+                }
+            }).on('click', '.save', function () {
+                var row = $(this).parent().parent(),
+                    url = $(row).data('save-action'),
+                    method = $(row).data('save-method'),
+                    form = $('<form></form>').attr('action', url).attr('method', 'POST')
+                            .html('{{ form_widget(quantitiesForm._token) }}');
+                $(document.body).append(form);
+
+                if (method) {
+                    $(form).append($('<input>').attr('name', '_method').val(method));
+                }
+
+                $(form)
+                        .append($('<input>').attr('name', 'quantity[product]').val('{{ product.id }}'))
+                        .append($('<input>').attr('name', 'quantity[label]').val($(row).find('input[name=label]').val()))
+                        .append($('<input>').attr('name', 'quantity[price]').val($(row).find('input[name=price]').val()))
+                        .append($('<input>').attr('name', 'quantity[quantity]').val($(row).find('input[name=quantity]').val()))
+                        .submit();
+            });
+
+            $('#product_category').change(function () {
+                $.getJSON('{{ url('admin_products_categories') }}/' + $(this).val(), function (categories) {
+                    var select = $('#product_productCategory');
+
+                    $(select).html(''); // Clear old categories
+                    $(categories).each(function (key, category) {
+                        $(select).append($('<option></option>').attr('value', category.id).text(category.label));
+                    });
+                });
+            });
+
+            {% if product.id %}
+            $('#delete').click(function () {
+                if (confirm('Are you sure you want to delete product {{ product.itemNumber }}')) {
+                    var form = $('<form></form>')
+                            .attr('action', '{{ path('admin_products_delete', {'id': product.id}) }}')
+                            .attr('method', 'POST')
+                            .html($('<input>').attr('type', 'hidden').attr('name', '_method').val('DELETE'));
+                    $(document.body).append(form);
+                    $(form).submit();
+                }
+            });
+            {% endif %}
+        })(jQuery);
+    </script>
+{% endblock %}

@@ -1,0 +1,21 @@
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #333;
+    margin-bottom: 1rem;
+    background-color: #fff; 
+
+    thead > tr {
+        background-color: $gray-darker;
+        color: #eee;
+    }
+    tbody > tr.view-row { 
+        background-color: #eee; 
+    }
+    
+    th, td {
+        padding: 6px;
+        border: 1px solid #333;
+    }
+}

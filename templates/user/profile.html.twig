@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal">
+
+        <div id="infoBlock" class="info-block">
+             <h1>Customer Information</h1>
+
+            <p class="space_xs_m-b-none">Enter your customer information below.</p>
+            <p>Required fields are indicated with an<span class="exclaim">*</span></p>
+
+            <div id="errorBlock">
+                <span>{{ form_errors(form) }}</span>
+            </div>
+
+
+            <form id="custInfo" name="custInfo" action="{{ path('user_profile') }}" method="post">
+                {{ form_row(form._token) }}
+
+                <section id="general-info">
+                    <h2>General Info</h2>
+                    <div class="form-row">
+                        <label for="customer_firstName">First Name</label><span class="exclaim">*</span>
+                        <div class="form-input">{{ form_widget(form.firstName) }}</div>
+                        <div>{{ form_errors(form.firstName) }}</div>
+                    </div>
+                    <div class="form-row">
+                        <label for="customer_lastName">Last Name</label><span class="exclaim">*</span>
+                        <div class="form-input">{{ form_widget(form.lastName) }}</div>
+                        <div>{{ form_errors(form.lastName) }}</div>
+                    </div>
+                    <div class="form-row">
+                        <label for="customer_company">Company</label>
+                        <div class="form-input">{{ form_widget(form.company) }}</div>
+                        <div>{{ form_errors(form.company) }}</div>
+                    </div>
+                    <div class="form-row">
+                        <label for="customer_phone">Phone</label><span class="exclaim">*</span>
+                        <div>{{ form_widget(form.phone) }}</div>
+                        <div class="form-input" class="disclaimer">Only used to confirm orders if needed</div>
+                        <div>{{ form_errors(form.phone) }}</div>
+                    </div>
+                    <div class="form-row">
+                        <label for="customer_email">Email</label><span class="required">*</span>
+                        <div class="form-input">{{ form_widget(form.email) }}</div>
+                        <div>{{ form_errors(form.email) }}</div>
+                    </div>
+                </section>
+
+                <div>
+                    <button type="submit" id="submitBtn" name="submitBtn" class="button">Save</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

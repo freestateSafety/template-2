@@ -1,0 +1,38 @@
+version: 2.1
+
+jobs:
+  production:
+    working_directory: ~/freestatesafety
+    machine:
+      image: ubuntu-2004:current
+    steps:
+      - checkout
+      - run: sudo apt install rsync
+      - run: rsync -av --progress ~/freestatesafety/ $SSH_USER@$SSH_HOST:/var/www/freestatesafety/
+      - run: ssh $SSH_USER@$SSH_HOST "cd /var/www/freestatesafety; SYMFONY_ENV=prod composer install --no-dev"
+      - run: ssh $SSH_USER@$SSH_HOST "cd /var/www/freestatesafety; yarn encore production"
+      - run: ssh $SSH_USER@$SSH_HOST "cd /var/www/freestatesafety; ./bin/console cache:clear --env=prod"
+  development:
+    working_directory: ~/freestatesafety
+    machine:
+      image: ubuntu-2004:current
+    steps:
+      - checkout
+      - run: sudo apt install rsync
+      - run: rsync -av --progress ~/freestatesafety/ $SSH_USER@$SSH_HOST:/var/www/freestatesafety-develop/
+      - run: ssh $SSH_USER@$SSH_HOST "cd /var/www/freestatesafety-develop; composer install"
+      - run: ssh $SSH_USER@$SSH_HOST "cd /var/www/freestatesafety-develop; yarn encore dev"
+      - run: ssh $SSH_USER@$SSH_HOST "cd /var/www/freestatesafety-develop; ./bin/console cache:clear --env=dev"
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - production:
+          filters:
+            branches:
+              only: master
+      - development:
+          filters:
+            branches:
+              only: develop

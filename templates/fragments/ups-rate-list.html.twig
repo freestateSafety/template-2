@@ -1,0 +1,30 @@
+                <table id="shipTable">
+                    <thead>
+                        <tr>
+                            <th class="t-align-center space_xs_p-h-md space_xs_p-v-sm">Select</th>
+                            <th class="t-align-center space_xs_p-h-md space_xs_p-v-sm" width="100%">UPS Shipping Options</th>
+                            <th class="t-align- center space_xs_p-h-md space_xs_p-v-sm">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rate in rates %}
+                        <tr>
+                            <td class="t-align-center space_xs_p-h-md space_xs_p-v-sm">
+                                <input type="radio" name="shipType" class="shipTypeRadio" data-cost="{{ rate.TotalCharges.MonetaryValue }}" value="{{ rate.Service.Code.value }}">
+                            </td>
+                            <td class="space_xs_p-h-md space_xs_p-v-sm">{{ rate.Service.Code.getName }}</td>
+                            <td class="t-align-right space_xs_p-h-md space_xs_p-v-sm">{{ rate.TotalCharges }}</td>
+                        </tr>
+                        {% endfor %}
+                        {# 
+                        Removed as its not working as expected - Eric M 01/12/2023
+                        <tr>
+                            <td align="center">
+                                <input type="radio" id="customShipping" name="shipType" class="shipTypeRadio" data-cost="0" value="custom">
+                            </td>
+                            <td>Use My Shipping Account</td>
+                            <td align="right">&nbsp;-&nbsp;-&nbsp;-&nbsp;</td>
+                        </tr>
+                         #}
+                    </tbody>
+                </table>

@@ -1,0 +1,106 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+   
+{% endblock %}
+
+{% block body %}
+
+    <div id="contentInternal" class="content-internal admin">
+
+        <h3>Users</h3>
+        
+        <div>
+            <form method="get" action="{{ path('admin_customer') }}" id="search"  class="flex-grid-gap flex-align-end space_xs_m-b-lg">
+                <div  class="flex-gap__col-xs-12 flex-gap__col-md-2" style="max-width: 250px">
+                    <label for="text">Search for</label>
+                    <input name="text" type="text" value="{{ app.request.query.get('text') }}" maxlength="">
+                </div>
+                <div  class="flex-gap__col-xs-12 flex-gap__col-md-2" style="max-width: 250px">
+                    <label for="field">in Field</label>
+                    <select name="field" id="field">
+                        <option>- - Select - -</option>
+                        <option value="name"{% if app.request.query.get('field') == 'name' %} selected{% endif %}>Customer Name</option>
+                        <option value="company"{% if app.request.query.get('field') == 'company' %} selected{% endif %}>Company</option>
+                        <option value="email"{% if app.request.query.get('field') == 'email' %} selected{% endif %}>Email</option>
+                    </select>
+                </div>
+                <div class="flex-gap__col-xs-12 flex-gap__col-md-1" style="max-width: 90px">
+                    <button type="submit" id="submitBtn" name="submitBtn" class="button space_xs_m-b-none">Search</button>
+                </div>
+                {% if app.request.query.has('text') %}
+                    <div class="flex-gap__col-xs-12 flex-gap__col-md-1" style="max-width: 90px">
+                        <a href="{{ path('admin_customer') }}" class="button button-secondary space_xs_m-b-none">Clear</a>
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+        <div class="row">
+            <button id="addCustomerBtn" href="{{ path('admin_customer_create') }}" class="button button-secondary">Add New User</button>
+        </div>
+        
+        <table id="customer" class="data-table" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Customer Name</th>
+                    <th>Company</b></th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if customers|length == 0 %}
+                <tr>
+                    <td colspan="6">There are currently no customers in the database</td>
+                </tr>
+            {% else %}
+                {% for customer in customers %}
+                    <tr>
+                        <td>
+                            <a class="button small-button" href="{{ path('admin_customer_show', {'id': customer.id}) }}" title="Edit">
+                                Edit
+                            </a>
+                            {% if app.user != customer %}
+                                <button class="button small-button" title="Delete" data-action="{{ path('admin_customer_delete', {'id': customer.id}) }}">
+                                    Delete
+                                </button>
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <a class="button small-button" href="{{ path('user_dashboard', {_switch_user: customer.email}) }}" title="View Site as {{ customer.email }}">
+                                        View Site As 
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ customer.name }}{% if app.user == customer %} <strong style="color: red;">(YOU)</strong>{% endif %}
+                        </td>
+                        <td>{{ customer.company }}</td>
+                        <td class="t-align-center">{{ customer.phone }}</td>
+                        <td>{{ customer.email }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        (function ($) {
+            $('.delete').click(function () {
+                var action = $(this).data('action');
+                var name = $(this).parent().parent().find('td:nth-child(2)').text();
+                if (confirm('Are you sure you want to delete customer "'+name+'"?')) {
+                    var form = $('<form></form>');
+                    $(document.body).append($(form));
+                    $(form).attr('method', 'post').attr('action', action)
+                            .html($('<input>').attr('name', '_method').attr('type', 'hidden').val('DELETE'))
+                            .submit();
+                }
+            });
+        }(jQuery))
+    </script>
+{% endblock %}

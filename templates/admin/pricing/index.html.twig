@@ -1,0 +1,213 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+
+    <div id="contentInternal" class="content-internal admin">
+
+        <h1>Manage Pricing</h1>
+        <p class="space_xs_m-b-xl">Manage product pricing tables by using tool below</p>
+
+        <div class="flex-grid  space_xs_m-b-lg">
+            <a href="/admin/pricing/add" class="button space_xs_m-b-lg" title="Add new pricing">
+                <span class="fa fa-plus"></span>
+                Add New Pricing Table
+            </a>
+            <table class="adminProductTable" cellpadding="0" cellspacing="0">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="t-align-center">Products Assoc.</th>
+                <th class="space_xs_p-l-lg" width="80%" nowrap>Pricing Table Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            {# THIS IS DUMMY DATA #}
+                <tr>
+                    <td class="t-align-center"><a href="#">Edit</a></td>
+                    <td class="t-align-center">
+                        <a href="#" class="showTableRow small-button" data-table-id="1"><span class="fa fa-plus-circle"></span></a>
+                    </td>
+                    <td class="t-align-center">35</td>
+                    <td class="">4 X 4 Labels on Heavy Weight Gloss Paper with Permanent Adhesive</td>
+                </tr>
+                <tr class="view-row" data-row-id="1" hidden>
+                    <td colspan="4" class="space_xs_p-a-xl">
+                        <table cellpadding=0 cellspacing=0 border=0 class="table">
+                            <thead>
+                                <tr>
+                                    <th>Group Name</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {# LOOP ARRAY FROM DATA #}
+                                <tr>
+                                    <td>1 Roll</td>
+                                    <td>1</td>
+                                    <td>14.50</td>
+                                </tr>
+                                {# END LOOP ARRAY FROM DATA #}
+                                <tr>
+                                    <td>2-9 Rolls</td>
+                                    <td>9</td>
+                                    <td>11.50</td>
+                                </tr>
+                                <tr>
+                                    <td>10+ Rolls</td>
+                                    <td>10</td>
+                                    <td>10.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="t-align-center"><a href="#">Edit</a></td>
+                    <td class="t-align-center">
+                        <a href="#" class="showTableRow small-button" data-table-id="2"><span class="fa fa-plus-circle"></span></a>
+                    </td>
+                    <td class="t-align-center">43</td>
+                    <td class="">DOT 4 X 4 Labels on All Weather Vinyl with Permanent Adhesive</td>
+                </tr>
+                <tr class="view-row" data-row-id="2" hidden>
+                    <td colspan="4" class="space_xs_p-a-xl">
+                        <table cellpadding=0 cellspacing=0 border=0 class="table">
+                            <thead>
+                                <tr>
+                                    <th>Group Name</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="t-align-center"><a href="#">Edit</a></td>
+                    <td class="t-align-center">
+                        <a href="#" class="showTableRow small-button" data-table-id="3"><span class="fa fa-plus-circle"></span></a>
+                    </td>
+                    <td class="t-align-center">15</td>
+                    <td class="">4 x 6 Extended Tabs on Thermal Transfer Paper with Permanent Adhesive</td>
+                </tr>
+                <tr class="view-row" data-row-id="3" hidden>
+                    <td colspan="4" class="space_xs_p-a-xl">
+                        <table cellpadding=0 cellspacing=0 border=0 class="table">
+                            <thead>
+                                <tr>
+                                    <th>Group Name</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {# LOOP ARRAY FROM DATA #}
+                                <tr>
+                                    <td>1 Roll</td>
+                                    <td>1</td>
+                                    <td>14.50</td>
+                                </tr>
+                                {# END LOOP ARRAY FROM DATA #}
+                                <tr>
+                                    <td>2-9 Rolls</td>
+                                    <td>9</td>
+                                    <td>11.50</td>
+                                </tr>
+                                <tr>
+                                    <td>10+ Rolls</td>
+                                    <td>10</td>
+                                    <td>10.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+             {# END OF DUMMY DATA #}
+
+            {# if pricing  %}  
+                {# {% for pricing in pricing %}
+                    <tr data-id="{{ pricing.id }}">
+                        <td nowrap>
+                            <button type="button" class="small-button edit" data-action="{{ path('admin_materials_edit', {'id': material.id}) }}">
+                                <span class="fa fa-edit"></span>
+                            </button>
+                        </td>
+                        <td align="center">{{ material.id }}</td>
+                        <td class="editable">{{ material.material }}</td>
+                    </tr>
+                    <tr data-id-"viewtable-{{ pricing.id }}" class="hidden">
+                        <td colspan="3" class="t-align-center">
+                            <table>
+                                <tr>
+                                    <th>Group Name</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                </tr>
+                                {% for table in pricingTable %}
+                                <tr>
+                                    <td>output group name</td>
+                                    <td>output start qty</td>
+                                    <td>output price</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                {% endfor %}  
+            {% else %} 
+            
+                <tr>
+                    <td colspan="3" class="t-align-center">There are currently no pricing tables</td>
+                </tr>
+            
+            {% end %}  
+            #}
+
+        
+            </table>
+            
+        </div>
+
+        <noscript>
+            <div>
+                <h1 class="error">We're sorry!</h1>
+                <h2>Javascript is required to display this site</h2>
+            </div>
+        </noscript>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        (function ($) {
+            $("a.showTableRow").click(function () {
+                console.log(this);
+                if ( $(this).find("span").hasClass("fa-plus-circle") ) {
+                    //change to minus
+                    $(this).find("span").removeClass("fa-plus-circle").addClass("fa-minus-circle");
+                } else {
+                    //change back to plus
+                    $(this).find("span").removeClass("fa-minus-circle").addClass("fa-plus-circle");
+                }
+                    
+                tableId = $(this).attr("data-table-id");
+                console.log("ID --> " + tableId );  
+                $("tr[data-row-id='"+ tableId +"']").toggle("hidden");
+
+            });
+
+        }(jQuery));
+    </script>
+{% endblock %}

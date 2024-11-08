@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" dir="ltr" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}{% endblock %}</title>
+
+    <style>
+    /* Remove space around the email design. */
+    html,body {font-size:16px; margin: 0 auto !important; padding:0 !important; height:100% !important; width: 100% !important;}
+
+    /* Stop Outlook resizing small text. */
+    * { -ms-text-size-adjust: 100%; }
+
+    /* Stop Outlook from adding extra spacing to tables. */
+    table,td { mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important;}
+
+    /* Use a better rendering method when resizing images in Outlook IE. */
+    img { -ms-interpolation-mode:bicubic; }
+    h1,h2,h3,h4,h5,h6 { display:inline-block; }
+    </style>
+</head>
+<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly;">
+    <div style="background-color:#cccccc; font-family:arial,verdana; font-size:14px;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" bgcolor="#ffffff" align="center" style="width:100%; max-width:800px;">
+        <tbody>
+        <tr>
+        <td align="center">
+
+            <table  role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tbody>
+            <tr style="background-color:#000000;">
+                <td>
+                    <img src="https://www.freestatesafety.com/images/email-banner.png" width="800" height="180" alt="FreeState Safety" border="0" 
+                        style="width: 100%; height:auto; background-color: #000000; display: block;" />
+                </td>
+            </tr>
+            <tr>
+            <td style="padding:16px;">
+                <div>
+                    {% block body %}{% endblock %}
+                </div>
+            </td>
+            </tr>
+            <tr bgcolor="#000000" style="color:#cccccc;">
+                <td nowrap style="font-size:12px; text-align:center; padding:10px;">
+                    <p style="font-size: 16px;font-weight:700;">Call us today at <a style="color: #FFFFFF;" href="tel:+1{{site.ph_short}}">{{site.phone}}</a></p>
+                    <p style="font-size:12px; margin:0;">{{ site.name }}, Inc</p>
+                    <p style="font-size:12px; margin:0;">{{ site.street }} {{ site.city }}, {{ site.state }} {{ site.zip }}</p>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+
+        </td>
+        </tr>
+        </tbody>
+        </table>   
+    </div>
+</body>
+</html>

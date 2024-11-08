@@ -1,0 +1,35 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+        <h2>Delete {{ material.material }}</h2>
+        <p>
+            The material {{ material.material }} is still tied to {{ material.products.count }} products listed below.
+            Use the select box to reassign all products using this material to another material.
+        </p>
+
+        <h3>New Material</h3>
+        <form method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <div class="formRow">
+                <select name="new_material">
+                    {% for m in materials %}
+                        <option value="{{ m.id }}">{{ m.material }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="formRow">
+                <butotn type="submit" id="updateProducts" name="updateProducts" class="button">Update Products &amp; Remove Material</button>
+                <a href="{{ path('admin_materials') }}"><button type="button" class="button button-secondary">Cancel</button></a>
+            </div>
+        </form>
+
+        <h3>Product List</h3>
+        <ul>
+        {% for product in material.products %}
+            <li><a href="{{ url('admin_products_update', {'id': product.id}) }}">View</a> - {{ product.name }}</li>
+        {% endfor %}
+        </ul>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div id="content" class="content-size-x content-size-y ">
+
+        <h1 class="space_xs_m-b-sm">Edit Pricing Table</h1>
+        <p class="space_xs_m-b-xl">Use the form below to edit the pricing structure for this table</p>
+
+        <form method="post" action="" name="add-edit-table">
+
+            <div class="flex-grid">
+
+                <div class="flex-grid__col-md-4">
+
+                    <div class="form-row">
+                        <label class="t-align-left">Group Label</label>
+                        <input type="text" name="label">
+                    </div>
+                    <div class="form-row">
+                        <label>Qty (max quantity of this price group)</label>
+                        <input type="text" name="qty">
+                    </div>
+                    <div class="form-row">
+                        <label>Qty Price</label>
+                        <input type="text" name="price">
+                    </div>
+
+                    <div class="form-row">
+                        <button type="button" class="button">Add Price Group</button>
+                    </div>
+
+                </div>
+                <div class="flex-grid__col-md-8 ">
+                    <label>{ Current Table Name }</label>
+                    <table> 
+                        <thead>
+                            <tr>
+                            <th width="60%">Group Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">Adding information on the left will show up here</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="t-align-right">
+                        {# 
+                        <button type="button" class="button">Done - Save Price Group</button>
+                         #}
+                    </div>
+                </div>
+    
+             
+            </div>
+        </form>
+    </div>
+ 
+{% endblock %}

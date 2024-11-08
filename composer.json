@@ -1,0 +1,92 @@
+{
+    "name": "symfony/framework-standard-edition",
+    "license": "MIT",
+    "type": "project",
+    "description": "The \"Symfony Standard Edition\" distribution",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:BigE/SimpleUps.git"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "beberlei/doctrineextensions": "^1.0",
+        "bige/simpleups": "dev-develop",
+        "defuse/php-encryption": "~2.0",
+        "doctrine/annotations": "*",
+        "doctrine/doctrine-bundle": "*",
+        "doctrine/doctrine-migrations-bundle": "*",
+        "doctrine/orm": "^2.0",
+        "guzzlehttp/guzzle": "^7.8",
+        "square/connect": "^2.0",
+        "symfony/asset": "*",
+        "symfony/cache": "*",
+        "symfony/console": "*",
+        "symfony/doctrine-bridge": "*",
+        "symfony/dotenv": "*",
+        "symfony/flex": "^1.20",
+        "symfony/form": "*",
+        "symfony/framework-bundle": "*",
+        "symfony/mailer": "*",
+        "symfony/monolog-bundle": "*",
+        "symfony/runtime": "*",
+        "symfony/security-bundle": "*",
+        "symfony/security-http": "*",
+        "symfony/templating": "*",
+        "symfony/twig-bridge": "*",
+        "symfony/twig-bundle": "*",
+        "symfony/validator": "*",
+        "symfony/webpack-encore-bundle": "^2.1",
+        "symfony/yaml": "*"
+    },
+    "require-dev": {
+        "rector/rector": "^0.18.3",
+        "symfony/debug-bundle": "*",
+        "symfony/maker-bundle": "*",
+        "symfony/web-profiler-bundle": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "doctrine:migrations:migrate --no-interaction": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "bin-dir": "bin",
+        "platform": {
+            "php": "8.2"
+        },
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "6.3.*"
+        }
+    }
+}

@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div id="contentInternal" class="content-internal ">
+
+        <h1>Payment Options</h1>
+        <p class="space_xs_m-b-xl space_xs_p-b-lg">Enter your payments options for this order below</p>
+
+        {% if error is defined %}
+        <div id="errorBlock" class="error-block">{{ error }}</div>
+        {% endif %}
+
+        <form id="paymentInfo" name="paymentInfo" action="{{ path('cart_payment') }}" method="post">
+
+            <div class="flex-grid-gap">
+                <div class="flex-gap__col-xs-12 flex-gap__col-md-7 ">
+
+                    <fieldset id="choiceBlock" class="space_xs_p-v-md space_xs_p-h-lg space_xs_m-b-lg">
+                        <legend>Select Payment Type</legend>
+                        <div class="space_xs_m-v-sm">
+                            <label class="display-inline">
+                            <input type="radio" id="credit_option" name="payment_option" value="card" checked class="space_xs_m-r-sm ">
+                            Pay by credit card
+                            </label>
+                        </div>
+                        <div class="space_xs_m-v-sm">
+                            <label class="display-inline ">
+                            <input type="radio" id="invoice_option" name="payment_option" value="invoice" class="space_xs_m-r-sm ">
+                            Send me an invoice
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="flex-gap__col-xs-12 flex-gap__col-md-5 "></div>
+
+                <div class="flex-gap__col-xs-12 flex-gap__col-md-7">
+                    
+                    <fieldset id="creditCardInfo" class="space_xs_p-a-md space_xs_m-b-lg">
+                        <legend>Credit Card Information</legend>
+                        <div id="creditBlock" class="">
+
+                            {% block creditCardForm %}
+                            {{ form_errors(paymentForm) }}
+                            {{ form_widget(paymentForm._token) }}
+
+                            <div class="form-row">
+                                <label>Name on Card</label>
+                                {{ form_widget(paymentForm.name) }}
+                                <div>{{ form_errors(paymentForm.name) }}</div>
+                            </div>
+                            <div class="form-row">
+                                <label>Card Number</label>
+                                {{ form_widget(paymentForm.number) }}
+                                <div>{{ form_errors(paymentForm.number) }}</div>
+                            </div>
+
+                            <div class="flex-grid flex-justify-start flex-align-start  space_xs_m-b-sm">
+
+                                <div class="flex-grid__col-xs-4 space_xs_p-r-md">
+                                    <label>Exp Month</label>
+                                    {{ form_widget(paymentForm.expire_month) }}
+                                    <div>{{ form_errors(paymentForm.expire_month) }}</div>
+                                </div>
+                                <div class="flex-grid__col-xs-4 space_xs_p-r-md">
+                                    <label>Exp Year</label>
+                                    {{ form_widget(paymentForm.expire_year) }}
+                                    <div>{{ form_errors(paymentForm.expire_year) }}</div>
+                                </div>
+                                <div class="flex-grid__col-xs-4 space_xs_p-r-md">
+                                    <label>CVV</label>
+                                    {{ form_widget(paymentForm.cvv) }}
+                                    <div><a id="what_is_cvv" href="#" class="disclaimer">What's This?</a></div>
+                                    <div>{{ form_errors(paymentForm.cvv) }}</div>
+                                </div>
+
+                            </div>
+
+                            {% endblock %}
+
+                        </div>
+                    </fieldset>
+
+                    <div class="space_xs_m-b-lg">
+                        <a href="{{ path('cart_shipping') }}" class="button button-secondary" >Shipping Method</a>
+                        <button type="submit" id="submitBtn" name="submitBtn" class="button">Review Order</button>
+                    </div>
+
+                </div>
+                <div class="flex-gap__col-xs-12 flex-gap__col-md-5 ">
+
+                    <div id="privacy" class="space_md_m-t-xl space_md_p-t-lg space_md_m-l-xl">
+                        <b>Privacy Policy</b>
+                        <p>We will only store your credit card information long enough to process your order. Once the order is verified,
+                        we delete your card information from our system. If you come back and order again, you will need to re-enter your card.</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div id="cvv_info">
+        <img src="{{ asset('images/cvv.jpg') }}" border="0">
+        <div>
+            <h2>Card Verification Value (CVV)</h2>
+            <p>Your CVV number can be located by looking on your credit or debit card, as illustrated in the example image.</p>
+            <p>The CVV helps verify that you have the physical credit and helps to reduce fraud by giving another level of authentication.</p>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('#cvv_info').hide();
+        $("#what_is_cvv").click(function(e){
+            e.preventDefault();
+            $("#cvv_info").modal({
+                overlayClose:true,
+                autoPosition:true,
+                onClose: function(dialog){
+                    $.modal.close();
+                }
+            });
+        });
+    });
+
+    $(document).ready(function(){
+        $("input[name='payment_option']").click(function(){
+            if( $(this).val() == "card" ){
+                $("#creditCardInfo").css("background-color","#fff");
+                $("#creditBlock").find("input").removeAttr("disabled");
+                $("#creditBlock").find("select").removeAttr("disabled");
+            } else if( $(this).val() == "invoice" ){
+                $("#creditCardInfo").css("background-color","#eee");
+                $("#creditBlock").find("input").attr("disabled","disabled");
+                $("#creditBlock").find("select").attr("disabled","disabled");
+            }
+        });
+    });
+    </script>
+{% endblock %}

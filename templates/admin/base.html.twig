@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet" type="text/css" media="all">
+{% endblock %}
+
+{% block title %}{{ parent() }} &raquo; Admin{% endblock %}

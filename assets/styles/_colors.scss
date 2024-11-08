@@ -1,0 +1,69 @@
+// Primary Colors
+$brand-primary: #e07300;
+$brand-secondary: #0d7a9e;
+$brand-tertiary: #1199a5;
+
+$brand-button-primary: #155494;
+$brand-button-primary-hover: #266bb1;
+$brand-button-secondary: #7e7f7f;
+
+$brand-blue: #0453ac;
+
+$gray-darkest: #09142a;
+$gray-darker: #394053;
+$gray-medium: #63666a;
+$gray-light: #999999;
+$gray-lighter: #b1bebf;
+$gray-lightest: #eee;
+
+// Utility
+$flag-valid: #5a9e00;
+$flag-error: #df0240;
+$modal-bkg: rgba(255, 255, 255, 0.8);
+$transparent: rgba(0, 0, 0, 0);
+
+.color-gray-darkest { color: $gray-darkest; }
+.color-gray-darker { color: $gray-darker; }
+.color-gray-medium { color: $gray-medium; }
+.color-gray-ligh { color: $gray-light; }
+.color-gray-lighter { color: $gray-lighter; }
+.color-gray-lightest { color: $gray-lightest; }
+
+.color-black { color: black }
+.color-white { color: white }
+.color-error { color: $flag-error; }
+.color-valid { color: $flag-valid; }
+
+.bkg-flag-valid { background-color: $flag-valid; }
+.bkg-flag-error { background-color: $flag-error; }
+.bkg-color-black { background-color: black; color: #eee; }
+
+.bkg-color-gray-darkest { background-color: $gray-darkest; }
+.bkg-color-gray-darker  { background-color: $gray-darker; }
+.bkg-color-gray-medium { background-color: $gray-medium; }
+.bkg-color-gray-light { background-color: $gray-light; }
+.bkg-color-gray-lighter { background-color: $gray-lighter; }
+.bkg-color-gray-lightest { background-color: $gray-lightest; }
+
+
+
+.bkg-color-white { background-color: white; }
+.bkg-modal-bkg { background-color: $modal-bkg; }
+.bkg-transparent { background-color: $transparent; }
+
+:root {
+    --brand-primary: #{$brand-primary};
+    --brand-secondary: #{$brand-secondary};
+    --brand-tertiary: #{$brand-tertiary};
+  
+    --gray-darkest: #{$gray-darkest};
+    --gray-darker: #{$gray-darker};
+    --gray-medium: #{$gray-medium};
+    --gray-lighter: #{$gray-lighter};
+    --gray-lightest: #{$gray-lightest};
+  
+    --flag-valid: #{$flag-valid};
+    --flag-error: #{$flag-error};
+    --transparent: #{$transparent};
+  }
+  

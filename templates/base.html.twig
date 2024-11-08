@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQC5QMBGQ2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-QQC5QMBGQ2');
+    </script>
+        
+    <link rel="preconnect" href="https://www.google.com">
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no"/>
+
+    <meta name="description="
+          content="Providing regulatory compliance placards and labels for shipping and handling of hazardous materials">
+
+    <link rel="favorite icon" href="{{ asset('images/favicon.ico') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ asset('images/apple-touch-icon-57x57.png') }}" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('images/apple-touch-icon-114x114.png') }}" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('images/apple-touch-icon-72x72.png') }}" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="{{ asset('images/apple-touch-icon-60x60.png') }}" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{{ asset('images/apple-touch-icon-120x120.png') }}" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="{{ asset('images/apple-touch-icon-76x76.png') }}" />
+
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-32x32.png') }}" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-16x16.png') }}" sizes="16x16" />
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-128.png') }}" sizes="128x128" />
+
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-square70x70logo" content="{{ asset('images/mstile-70x70.png') }}" />
+    
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "url": "{{ absolute_url('/') }}",
+        "logo": "{{ absolute_url(asset(site.logo)) }}",
+        "contactPoint": [{
+            "@type" : "ContactPoint",
+            "telephone": "+{{ site.phone }}",
+            "areaServed": "US",
+            "contactOption": "TollFree",
+            "contactType": "customer service"
+        }]
+    }
+    </script>
+    
+</head>
+<body id="site" class="site">
+    <div class="site-container">
+        <header>
+            
+            <div class="top-menubar">
+                <div class="calltoaction color-white">
+                    <span class="cta-link space_xs_m-r-xs">Call us today at</span>
+                    <a class="cta-link color-white" href="tel:+1{{ site.ph_short}}">{{ site.phone }}</a>
+                </div>
+                <div id="topNavContainer" class="home-nav-cont">
+                    <ul class="nav topnav">
+                        <li><a href="{{ path('homepage') }}">Home</a></li>
+                        {% if cart_size() > 0 %}
+                            <li class="bar">|</li>
+                            <li class="cart-nav"><a href="{{ path('cart') }}">Cart ({{ cart_size() }})</a></li>
+                        {% else %}
+                            <li class="bar">|</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div id="adminNavIcon" class="admin-nav-mobileicon">
+                    <span class="icon-lock"></span>
+                </div>
+                <nav id="adminNavCont" class="admin-nav">
+                    <ul class="nav">
+                        {% if app.user %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('admin_dashboard') }}">Admin</a></li>
+                            {% endif %}
+                            <li><a href="{{ path('user_dashboard') }}">Account</a></li>
+                            <li><a href="{{ path('logout') }}">Logout</a></li>
+                        {% else %}
+                            <li><a href="{{ path('customer_register') }}">Register</a></li>
+                            <li><a href="{{ path('login') }}">Login</a></li>
+                        {% endif %}
+                        {% if is_granted('IS_IMPERSONATOR') %}
+                            <li><a href="{{ path('admin_dashboard', {_switch_user: '_exit'}) }}">Exit Preview</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="hero" class="hero-container {% if bannerLarge is defined %} banner-home {% else %} banner {% endif %}">
+            <div class="hero flex-grid flex-align-center  ">
+                <div class="logo-container-2 flex-grid__col-xs-12 flex-grid__col-md-5 " >
+                    <img class="logo-img" src="/images/fsi_logo-bevel.png" alt="{{ site.name }} logo" >
+                    {# <img src="{{ asset(site.logo) }}" alt="{{ site.name }}"> #}
+                </div>
+                <div class="diamonds-container flex-grid__col-xs-12 flex-grid__col-md-7 ">
+                    <img class="diamonds-img" src="/images/fsi_diamonds.png" alt="various diamond labels image">
+                </div>
+            </div>
+        </div>
+
+        <nav id="menu" class="main-menu">
+            <div id="menuIconContainer" class="menu-icon-container">
+
+                <div class="cta-container flex-grid__col-xs-10">
+                    <span class="cta-link space_xs_m-r-xs">Call us today at</span>
+                    <a class="cta-link" href="tel:+1{{ site.ph_short}}">{{ site.phone }}</a>
+                </div>
+                <div class="flex-grid__col-xs-2 t-align-right">
+                    <button id="menuIcon" class="menu-icon">MENU</button>
+                </div>
+
+            </div>
+            <div id="menuContainer" role="menubar" class="menu-container">
+                <ul id="menuList" class="main-nav">
+                    {% for category in categories().findBy({parent: null}) %}
+                        <li id="nav_{{ category.id }}"><a href="#">{{ category }}</a></li>
+                        <li class="isSubnav">
+                            <div id="subnav_{{ category.id }}" class="subnav">
+                                {% for subCategory in category.subCategories %}
+                                    <div class="subnav-item">
+                                        <a class="subnav-link" href="{{ path('product_list', {parent_id: category.id, id: subCategory.id}) }}">
+                                            {{ subCategory.label }}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="menuCloser" class="menu-closer"></div>
+        </nav>
+
+        <main>
+            <div>
+                {% if is_granted('IS_IMPERSONATOR') %}
+                    <div class="flash-notice">You are viewing the site as the user {{ app.user.email }}</div>
+                {% endif %}
+                {% for message in app.session.flashBag.get('notice') %}
+                    <div class="flash-notice">{{ message }}</div>
+                {% endfor %}
+                {% for message in app.session.flashBag.get('success') %}
+                    <div class="flash-notice">{{ message }}</div>
+                {% endfor %}
+                {% for error in app.session.flashBag.get('error') %}
+                    <div class="flash-error">{{ error }}</div>
+                {% endfor %}
+                
+                {% block body %}{% endblock %}
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="content-size-x ">
+                <ul class="nav footer-nav flex-grid flex-justify-center ">
+                    <li><a href="{{ path('about') }}">About Us</a></li>
+                    <li><a href="{{ path('contact') }}">Contact Us</a></li>
+                    <li><a href="{{ path('privacy') }}">Privacy<span class="webOnly"> Policy</span></a></li>
+                </ul>
+                <div class="footer-info flex-grid flex-justify-center">
+                    <span class="stack">{{ site.name }}, Inc</span>
+                    <span class="webOnly">&nbsp;&bull;&nbsp;</span>
+                    <span class="stack">&copy; All Rights Reserved </span>
+                    <span class="webOnly">&nbsp;&bull;&nbsp;</span>
+                    <span class="stack">{{ site.street }}, {{ site.city }}, {{ site.state }} {{ site.zip }} </span>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet" type="text/css" media="all">
+
+    {% endblock %}
+    
+    <script type="text/javascript" src="{{ asset('js/jquery-1.11.3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.simplemodal.1.4.4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/store.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
+    {% block javascripts %}{% endblock %}
+    {{ encore_entry_script_tags('app') }}
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<tr>
+    <td class="t-align-center">
+        <a href="{{ path('admin_orders_show', {'id': order.id}) }}">View&nbsp;Order</a>
+    </td>
+    <td class="t-align-center">{{ order.number }}</td>
+    <td class="t-align-left">{{ order.customer.company }}</td>
+    <td class="t-align-left">{{ order.customer.name }} [<a href="mailto:{{ order.customer.email }}">{{ order.customer.email }}</a>]</td>
+    <td class="t-align-center">{{ order.created|date('m/d/Y') }}</td>
+    <td class="t-align-right" >{{ order.created|date('g:i:s A') }}</td>
+    <td class="t-align-right">${{ order.total|number_format(2) }}</td>
+</tr>

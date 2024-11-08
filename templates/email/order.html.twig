@@ -1,0 +1,97 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}
+    {{site.name}} Order Confirmation: {{ order.number }}
+{% endblock %}
+
+{% block body %}
+
+    <h1 style="font-size:26px; margin:0px; margin-top:12px; padding:0px;">Order Confirmation</h1>
+    <p style="margin:0; margin-bottom:16px; padding:0">Thank you for your order. You can find your order details below.</p>
+
+    <div style="height: 25px;"></div>
+
+    <h2 style="font-size:21px; margin:0; display:inline-block; border-bottom:1px solid #666;">Order Number</h2>
+    <p style="font-size:18px; margin:0; margin-bottom: 24px;">{{ order.number }}</p>
+
+    <div style="margin-bottom:24px;">
+        <h4 style="font-size:18px; margin: 0; margin-bottom:5px; display:inline-block; border-bottom:1px solid #666;">Customer Info</h4>
+        <p style="margin-top:0;">
+            {{ order.customer.name }}<br>
+            {% if order.customer.company %}
+                {{ order.customer.company }}<br>
+            {% endif %}
+            {{ order.customer.phone }}<br>
+            {{ order.customer.email }}<br>
+        </p>
+    </div>
+
+    <div>
+        <div style="display:inline-block; width:250px; margin-right:24px; margin-bottom:24px;">
+            <h4 style="font-size:18px; margin:0; margin-bottom:5px; border-bottom:1px solid #666;">Shipping Address</h4>
+            <p style="margin:0;">
+                {{ order.shipment.address|nl2br }}             
+            </p>    
+        </div>
+       <div style="display:inline-block; width:250px; margin-right:24px; margin-bottom:24px;">
+            <h4 style="font-size:18px; margin:0; margin-bottom:5px; border-bottom:1px solid #666;">Billing Address</h4>
+            <p style="margin:0;">
+                {{ order.customer.addressesBilling.first|nl2br }}
+            </p>
+        </div>
+    </div>
+
+    <div style="margin-bottom:24px; margin-right:24px;">
+            <h4 style="display:inline-block; font-size:18px; margin:0; margin-bottom:5px; border-bottom:1px solid #666;">Payment Info</h4>
+            <p style="margin:0;margin-bottom:24px;">
+                {% if order.payment.method == 'card' %}
+                        Order paid via credit card
+                    {# 
+                        {{ creditCard.name }}<br>
+                        {{ creditCard.numberMasked }}<br>
+                        Exp: {{ creditCard.expireMonth }}/{{ creditCard.expireYear }}<br>
+                     #}
+                {% else %}
+                    An invoice will be sent to the address listed
+                {% endif %}
+            </p>
+        </div>
+
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; margin-top:10px; ">
+        <thead>
+            <tr bgcolor="#cccccc" style="">
+                <th style="padding:6px; font-size:12px; border:1px solid #999999;">Item</th>
+                <th style="padding:6px; font-size:12px; border:1px solid #999999;">Product</th>
+                <th style="padding:6px; font-size:12px; border:1px solid #999999;">Qty</th>
+                <th style="padding:6px; font-size:12px; border:1px solid #999999;">Price</th>
+                <th style="padding:6px; font-size:12px; border:1px solid #999999;">Totals</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in order.products %}
+            <tr bgcolor="#ffffff" style="border-bottom:1px solid #999999; ">
+                <td style="padding:6px; font-size:12px; border:1px solid #999999;" nowrap>{{ product.itemNumber }}</td>
+                <td width="100%;" style="padding:6px; font-size:12px; border:1px solid #999999;">{{ product.name }}</td>
+                <td style="text-align:center; padding:6px; font-size:12px; border:1px solid #999999;">{{ product.quantity }}</td>
+                <td style="text-align:right; padding:6px; font-size:12px; border:1px solid #999999;">${{ product.price|number_format(2) }}</td>
+                <td style="text-align:right; padding:6px; font-size:12px; border:1px solid #999999;">${{ (product.price * product.quantity)|number_format(2) }}</td>
+            </tr>
+            {% endfor %}
+            <tr style="border:1px solid #cccccc; ">
+                <td bgcolor="#eeeeee" colspan="4" style="text-align:right; padding:6px; font-size:12px; border:1px solid #999999;"><b>Shipping ({{ order.shipment.method }})</b></td>
+                <td bgcolor="#ffffff" style="text-align:right; padding:6px; font-size:12px; border:1px solid #999999;">${{ order.shipment.total|number_format(2) }}</td>
+            </tr>
+            <tr style="border:1px solid #cccccc; "> 
+                <td bgcolor="#eeeeee" colspan="4" style="text-align:right; padding:6px; font-size:12px; border:1px solid #999999;"><b>Total</b></td>
+                <td bgcolor="#ffffff" style="text-align:right; padding:6px; font-size:12px; border:1px solid #999999;">${{ order.payment.total|number_format(2) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p style="color:#999999; font-size:14px">
+        At {{ site.name }}, we respect the privacy of all our customers. We take our customers privacy very seriously.
+        Please read our <a style="color:#999;" href="http://www.{{ site.domain }}/privacy">Privacy Policy</a> carefully so that you understand how we collect,
+        access, use, disclose, and secure your personal information.
+    </p>
+
+{% endblock %}

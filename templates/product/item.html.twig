@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} | {{ product.name }} - {{ product.itemNumber }} {% endblock %}
+
+{% block body %}
+    {# <div id="orgName">
+        Available from: 
+        <span itemprop="seller" itemscope itemtype="http://schema.org/Organization">
+            {{ site.name }}
+        </span>
+    </div> #}
+
+    <section id="content-internal-prod" class="content-size-x content-size-y" itemscope itemtype="http://schema.org/Product">
+
+        <h1 class="space_xs_m-b-xs" itemprop="name">{{ product }}</h1>
+
+        <p itemprop="description" class="product-desc space_xs_m-b-xl">
+            {{ product.productCategory }} printed on {{ product.material }}
+        </p>
+
+        <div class="product-page flex-grid-gap ">
+            <div class="image-area  flex-gap__col-xs-12 flex-gap__col-md-6 flex-gap__col-lg-5 ">
+                <img itemprop="image" id="productImg" src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.name }}" />
+            </div>
+            <div class="prod-detail-area flex-gap__col-xs-12 flex-gap__col-md-6 flex-gap__col-lg-7 ">
+
+                <div class="product-details-table space_xs_m-b-md">
+                    <div class="prod-row ">
+                        <div class="label">Item&nbsp;Number</div>
+                        <div class="detail" itemprop="productID">{{ product.itemNumber }}</div>
+                    </div>
+                    <div class="prod-row " itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">
+                        <div class="label" itemprop="name">Material</div>
+                        <div class="detail" itemprop="value">{{ product.material }}</div>
+                    </div>
+                    <div class="prod-row " itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">
+                        <div class="label" itemprop="name">Dimensions</div>
+                        <div class="detail" itemprop="value">{{ product.size }}</div>
+                    </div>
+                    {% if product.class %}
+                    <div class="prod-row "  itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">
+                        <div class="label">Class</div>
+                        <div class="detail" itemprop="value">{{ product.class }}</div>
+                    </div>
+                    {% endif %}
+                    {% if product.weight %}
+                    <div class="prod-row ">
+                        <div class="label" itemprop="name">Weight</div>
+                        <div class="detail" itemprop="weight">{{ product.weight }} lbs</div>
+                    </div>
+                    {% endif %}
+                    <div class="prod-row ">
+                        <div class="label" itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">Pkg Qty</div>
+                        <div class="detail" itemprop="value">{{ product.quantity }}</div>
+                    </div>
+                    <div class="prod-row">
+                        <div class="label" itemprop="name">Availability</div>
+                        <div class="detail" itemprop="availability" href="http://schema.org/InStock" />In Stock</div>
+                    </div>
+                </div>
+
+                <div class="product-details">
+                
+                    <div id="notes">{{ product.notes }}</div>
+                    <div class="spacer"></div>
+                
+                    <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
+                        {% if product.weight %}
+                            <form method="post" action="{{ path('cart_add') }}"  class="space_xs_m-b-md">
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <div>
+                                    <div id="orderForm" class="order-form">
+                                        <label for="quantity">QTY</label>
+                                        <input type="text" id="quantity" name="quantity" value="1" >
+                                        <span>{{ product.quantity }}</span>
+                                    </div>
+                                </div>
+                                <button id="prodPage_addToCart" type="submit" class="button primary">Add to Cart</button>
+
+                            </form>
+                        {% else %}
+                            <h3 class="space_xs_m-b-xl">To order this product call {{ site.phone }}</h3>
+                        {% endif %}
+
+                        <div class="space_xs_m-b-md">
+                            <table id="pricingTable" class="pricing-table" border="0" cellpadding="3" cellspacing="1" >
+                                <tr>
+                                    <th>Quantity</th>
+                                    <th>Price per Pack / Roll</th>
+                                </tr>
+                                {% for quantity in product.quantities %}
+                                <tr>
+                                    <td>{{ quantity.label }}</td>
+                                    <td>
+                                        <meta itemprop="priceCurrency" content="USD" />
+                                        $<span itemprop="price">{{ quantity.price }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        <div>
+
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        (function ($) {
+            $('#quantity').focus(function () {
+                $(this).select();
+            });
+        }(jQuery));
+    </script>
+{% endblock %}

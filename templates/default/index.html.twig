@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div id="content" class="content-size-x content-size-y ">
+
+        <h1 class="space_xs_m-b-sm">Industrial Labels and Signs</h1>
+        <h2 class="size-h4 space_xs_m-b-lg">Sticking to it Inside, Outside and Out the Door</h2>
+
+        <p class="space_xs_m-b-xl">
+            Specializing in regulatory compliance labels and signs for 30+ years. 
+            Hazmat Labels available for same day shipment at prices that can't be beat!  
+            Compliance safety signs for racks, totes, tanks, buildings, fences and secure areas.  
+            We give you cost-effective decision making power. 
+        </p>
+
+        <div id="frontPage">
+
+            <div class="flex-grid-gap">
+                {% for category in categories().findBy({parent: null}) %}
+
+                    <div class="flex-gap__col-xs-12 flex-gap__col-md-6 flex-gap__col-lg-4  ">
+                        <h3 class="size-h6 transform-uppercase">{{ category.label }}</h3>
+                        <div class="card-product-cat">
+                            <div class="pic">
+                                {% if category.image %}
+                                <img src="{{ asset('uploads/categories/' ~ category.image) }}" alt="{{ category.label }} image">
+                                {% else %}
+                                <img src="{{ asset('images/pixel.png') }}" alt="{{ category.label }} image">
+                                {% endif %}
+                            </div>
+                            <div class="list-container">
+                                <ul class="link-list">
+                                    {% for subCategory in category.subCategories %}
+                                        {% if loop.index0 < 5 %}
+                                            <li>
+                                                <a class="subnavLink" href="{{ path('product_list', {'parent_id': category.id, 'id': subCategory.id}) }}">{{ subCategory.label }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+                
+            </div>
+        </div>
+        
+    </div>
+{# 
+    <div id="bannerAdContainer" class="banner-ad-container content-size-x content-size-y ">
+
+        <div class="banner-ad  flex-grid-gap flex-wrap-nowrap ">
+            <div class="">
+                <img src="" style="border:1px solid white; width: 100px; height:100px;">
+            </div>
+            <div class="flex-grow space_xs_p-l-lg">
+                <h4>Banner Headline</h4>
+                <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+            </div>
+        </div>
+
+    </div>
+ #}
+{% endblock %}

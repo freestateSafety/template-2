@@ -1,0 +1,103 @@
+
+label { font-size: 1rem; display: block; }
+input { font-size: 1rem; margin: 0; padding: 1rem; color:#333; }
+select { font-size: 1rem; margin: 0; font-size: 1rem; width: 100%; max-width: 100%; padding: 6px 8px; }
+input:focus, textarea:focus { font-size: 1rem; outline:0; }
+
+
+input {
+    padding: .5rem 1rem;
+    color: #333;
+}
+input[type=text] {
+    width: 90%;
+}
+input[type=email] {
+    width: 90%;
+    max-width: 300px
+}
+input[type=tel] {
+    width: 90%;
+    max-width: 100px
+}
+input[type=text] {
+    width: 90%;
+}
+input[type=radio] {
+    display:inline;
+}
+input[type=checkbox] {
+    display: inline-block;
+}
+label {
+    margin-bottom: 3px;
+}
+textarea {
+    font-family: inherit;
+    width: 90% !important;
+    padding: .5rem 1rem;
+    color: #333;
+}
+.required:not(label),:required:not(:disabled){
+    border:2px solid #fa432b;
+}
+.exclaim {
+    position:relative;
+    top: .15em;
+    padding-left: .5rem;
+    color: $flag-error;
+    font-size: 1.25rem;
+}
+.order-form { 
+    display: inline-block; 
+    text-align: right; 
+    margin: 0 2em 2em 0;
+    span { margin-left:1em; }
+}
+.error-block { display:none; margin:1em 0; color:red; font-weight:bold; }
+.disclaimer { font-size: 12px; }
+
+.required:after {  
+    position: relative;
+    right: -5px;
+    top: 1px;
+    content: '*';
+    color: var(--flag-error);
+}
+
+.info-block {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+}
+.form-row {
+    display: block;
+    margin-bottom: 1rem;
+}
+.form-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .icon.error{
+        position: relative;
+        left: -40px;
+        width: 25px;
+        height: 25px;
+    }
+}
+.inline-error {
+    padding: 8px 0;
+    color: $flag-error;
+}
+.icon {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+    &.error {
+        background-image: url("/public/images/icon_error.png");
+        background-repeat: no-repeat;
+        background-size: 80%;
+        background-position: center center;
+    }
+}

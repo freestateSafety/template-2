@@ -1,0 +1,128 @@
+{% extends 'cart/payment.html.twig' %}
+
+{% block creditCardForm %}
+    <div id="cardNumber" class="formRow">
+        <div class="leftForm"><label>Card Number</label></div>
+        <div class="rightForm"><input id="sq-card-number"></div>
+        <div class="formError hidden"></div>
+    </div>
+    <div id="cvv" class="formRow">
+        <div class="leftForm"><label for="sq-cvv">CVV</label></div>
+        <div class="rightForm"><input id="sq-cvv"></div>
+        <div class="formError hidden"></div>
+    </div>
+    <div id="expirationDate" class="formRow">
+        <div class="leftForm"><label for="sq-expiration-date">Expiration Date</label></div>
+        <div class="rightForm"><input id="sq-expiration-date"></div>
+        <div class="formError hidden"></div>
+    </div>
+    <div id="postalCode" class="formRow">
+        <div class="leftForm"><label for="sq-postal-code">Postal Code</label></div>
+        <div class="rightForm"><input id="sq-postal-code"></div>
+        <div class="formError hidden"></div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <form id="nonce-form" method="post">
+        <input type="hidden" name="payment_option" value="card">
+        <input type="hidden" id="card-nonce" name="square_nonce">
+        <input type="hidden" id="card-data" name="square_data">
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
+    <script type="text/javascript">
+        var appId = 'sandbox-sq0idp-Bx80LWGHtCNwnbKybZAcmg';
+
+        var paymentForm = new SqPaymentForm({
+            applicationId: appId,
+            inputClass: 'sq-input',
+            inputStyles: [
+                {
+                    fontSize: '15px'
+                }
+            ],
+            cardNumber: {
+                elementId: 'sq-card-number',
+                placeholder: '•••• •••• •••• ••••'
+            },
+            cvv: {
+                elementId: 'sq-cvv',
+                placeholder: 'CVV'
+            },
+            expirationDate: {
+                elementId: 'sq-expiration-date',
+                placeholder: 'MM/YY'
+            },
+            postalCode: {
+                elementId: 'sq-postal-code'
+            },
+            callbacks: {
+                cardNonceResponseReceived: function (errors, nonce, cardData) {
+                    if (errors) {
+                        errors.forEach(function (error) {
+                            $('#' + error.field).find('.formError').text(error.message).removeClass('hidden');
+                        });
+                    } else {
+                         document.getElementById('card-nonce').value = nonce;
+                         document.getElementById('card-data').value = JSON.stringify(cardData);
+                         document.getElementById('nonce-form').submit();
+                    }
+                },
+
+                unsupportedBrowserDetected: function () {
+                    alert('We are unable to process your payment. Please upgrade your browser to continue.');
+                },
+
+                // Fill in these cases to respond to various events that can occur while a
+                // buyer is using the payment form.
+                inputEventReceived: function (inputEvent) {
+                    switch (inputEvent.eventType) {
+                        case 'focusClassAdded':
+                            // Handle as desired
+                            break;
+                        case 'focusClassRemoved':
+                            // Handle as desired
+                            break;
+                        case 'errorClassAdded':
+                            // Handle as desired
+                            break;
+                        case 'errorClassRemoved':
+                            // Handle as desired
+                            break;
+                        case 'cardBrandChanged':
+                            // Handle as desired
+                            break;
+                        case 'postalCodeChanged':
+                            // Handle as desired
+                            break;
+                    }
+                },
+
+                paymentFormLoaded: function () {
+                    // Fill in this callback to perform actions after the payment form is
+                    // done loading (such as setting the postal code field programmatically).
+                    paymentForm.setPostalCode('{{ address.zip }}');
+                }
+            }
+        });
+
+        // This function is called when a buyer clicks the Submit button on the webpage
+        // to charge their card.
+        $(document).ready(function () {
+            $('#submitBtn').click(function () {
+                $('.formError').text('').addClass('hidden');
+                // This prevents the Submit button from submitting its associated form.
+                // Instead, clicking the Submit button should tell the SqPaymentForm to generate
+                // a card nonce, which the next line does.
+                event.preventDefault();
+
+                paymentForm.requestCardNonce();
+            });
+        });
+    </script>
+{% endblock %}

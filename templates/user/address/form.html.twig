@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal">
+
+        <div id="infoBlock" class="info-block">
+
+            <h1>Customer Information</h1>
+
+            <div class="">
+
+                {% if app.session.flashBag.has('error') -%}
+                    <div class="error">{{ app.session.flashBag.get('error') }}</div>
+                {%- endif %}
+
+                <form id="custInfo" name="custInfo" method="post">
+
+                    {% if address.id is not null %}
+                        <input type="hidden" name="_method" value="PUT">
+                    {% endif %}
+
+                    {{ form_widget(form._token) }}
+
+                    {% include('fragments/address.html.twig') %}
+
+                    <div class="">
+                        <button type="submit" class="button">Save</button>
+                        {% if address.id and app.user.addresses(address.type).count > 1 %}
+                            <button type="button" id="delete" class="button button-secondary">Delete</button>
+                        {% endif %}
+                        <button type="reset" class="button button-secondary">Reset</button>
+                    </div>
+
+                </form>
+
+                {% if address.id %}
+                <form id="deleteForm" method="post" action="{{ path('user_address_delete', {id: address.id}) }}">
+                    <input type="hidden" id="_method" name="_method" value="Delete" class="button button-secondary">
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+    <script type="text/javascript">
+        (function ($) {
+            $('#delete').click(function () {
+                if (confirm('Are you sure you want to delete this address?')) {
+                    $('#deleteForm').submit();
+                }
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

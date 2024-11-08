@@ -1,0 +1,53 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+
+        <h1>Manage Products</h1>
+        <p>Select a product to manage by using the form below to select the category and subcategory.</p>
+
+        <div class="flex-grid  space_xs_m-b-lg">
+
+            <div class=" space_xs_m-r-sm">
+                <label>Category</label>
+                <select name="category" id="category">
+                    {% for category in categories().findBy({'parent': null}) %}
+                        <option value="{{ category.id }}"{% if category.id == currentCategory.id %} selected{% endif %}>{{ category.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="">
+                <label>Sub-category</label>
+                <select name="type" id="type">
+                    {% for subCategory in currentCategory.subCategories %}
+                        <option value="{{ subCategory.id }}"{% if subCategory.id == currentSubCategory.id %} selected{% endif %}>{{ subCategory.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex-grow">&nbsp;</div>
+        </div>
+
+        {% block admin_body %}{% endblock %}
+
+        <noscript>
+            <div>
+                <h1 class="error">We're sorry!</h1>
+                <h2>Javascript is required to display this site</h2>
+            </div>
+        </noscript>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $('#category').change(function () {
+            window.location.href = '{{ path('admin_products') }}?category=' + $('option:selected', this).val();
+        });
+
+        $('#type').change(function () {
+            window.location.href = '{{ path('admin_products') }}?category={{ currentCategory.id }}&subCategory=' + $('option:selected', this).val();
+        });
+    </script>
+{% endblock %}

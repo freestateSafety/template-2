@@ -1,0 +1,32 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}
+    {{site.name}} Order Fulfilled: {{ order.number }}
+{% endblock %}
+
+{% block body %}
+
+    <h1 style="dislay:block; font-size:26px; margin-top:1em; margin-bottom:1em;">Order Fulfilled</h1>
+
+    <h2 style="dislay:block; font-size:18px; margin:0; font-weight:700;">Order {{ order.number }} has been fulfilled.</h2>
+    <p style="margin:0;margin-bottom:16px;">Thank you for doing business with {{site.name}}. We value your business.</p>
+
+    {% if order.shipment.trackingNumber %}
+        <h4 style="font-size:18px; margin:0; font-weight:bold;">Tracking Your Shipment</h4>
+        <p style="margin:0;">You can track your shipment by clicking the following button</p>
+            <a  target="_blank" 
+                style="text-decoration:none; display:inline-block; color:#fff; font-size:1rem; background-color:#155494; border:1px solid #21213d; border-radius:3px; font-weight:700; margin:20px 0 30px; padding:0.5em 1em;" 
+                href="http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums={{ order.shipment.trackingNumber }}">
+                    Track your order with UPS
+            </a>
+        </p>
+    {% endif %}
+
+    {% if order.notes %}
+    <div>
+        <h4 style="dislay:block; font-size:16px;margin:0;">Customer Notes</h4>
+        <p style="margin:0">{{ order.notes }}</p>
+    </div>
+    {% endif %}
+
+{% endblock %}

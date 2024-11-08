@@ -1,0 +1,107 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal">
+
+        <h1>My Account - Home</h1>
+
+        <div id="shortList" class="space_xs_m-b-lg">
+
+            <table class="order-history" border="0" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="bkg-color-gray-darker">
+                        <th colspan="7">
+                            Last 10 orders for:&nbsp;
+                            {% if user.company %}
+                                {{ user.company }}
+                            {% else %}
+                                {{ user.name }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr class="bkg-color-gray-medium">
+                        <th></th>
+                        <th align="center"><b>Order&nbsp;#</b></th>
+                        <th align="center"><b>Order&nbsp;Date</b></th>
+                        <th align="center"><b>Order&nbsp;Time</b></th>
+                        <th align="center"><b>Fulfilled Date</b></th>
+                        <th align="center"><b>Totals</b></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if orders.count > 0 %}
+                    {% for order in orders %}
+                    <tr class="bkg-color-gray-lightest">
+                        <td class="center"><a href="{{ path('user_order', {number: order.number}) }}">View&nbsp;Order</a></td>
+                        <td class="center">{{ order.number }}</td>
+                        <td class="center">{{ order.created|date('m/d/Y') }}</td>
+                        <td class="center">{{ order.created|date('g:i:s A') }}</td>
+                        <td class="center">{{ order.updated is empty? 'Active' : order.updated|date('m/d/Y g:i:s A') }}</td>
+                        <td class="right">${{ order.payment.total|number_format(2) }}</td>
+                        <td class="center">
+                            <a href="{{ path('user_order', {number: order.number}) }}?duplicate" class="button btnSubmit">Duplicate</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" align="center">No orders have been placed</td>
+                    </tr>
+                {% endif %}
+                <tbody>
+            </table>
+
+        </div>
+
+        <h2 class="space_xs_m-b-xl">Account Information</h2>
+
+        <div class="user-info">
+            <div class="flex-grid ">
+                
+                <div class="user-info-item">
+                    <h3 class="size-h4">Contact Information</h3>
+                    <div>
+                        {{ user.name }}<br>
+                        {% if user.company %}
+                            {{ user.company }}<br>
+                        {% endif %}
+                        {% if user.phone %}
+                            {{ user.phone|phone }}<br>
+                        {% endif %}
+                        {{ user.email }}<br>
+                    </div>
+                    <div class="space_xs_m-b-md"><a href="{{ path('user_profile') }}">Edit Information</a></div>
+                    <div><a href="{{ path('user_password') }}">Change Password</a></div>
+                </div>
+
+                <div class="user-info-item">
+                    <h3 class="size-h4">Billing Address</h3>
+                    <div class="space_xs_m-b-md">
+                        <div>{{ user.addressesBilling.first|nl2br }}</div>
+                        <div>
+                            <a href="{{ path('user_address_update', {type: 'billing', id: user.addressesBilling.first.id}) }}">Edit Address</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-info-item">
+                    <h3 class="size-h4">Shipping Address(es)</h3>
+                    <div >
+                        {% for address in user.addressesShipping %}
+                            <div class="">{{ address|nl2br }}</div>
+                            <div class="space_xs_m-b-md"><a href="{{ path('user_address_update', {type: 'shipping', id: address.id}) }}">Edit Address</a></div>
+                        {% endfor %}
+                        <div>
+                            <a href="{{ path('user_address_create', {type: 'shipping'}) }}">Create New Shipping Address</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

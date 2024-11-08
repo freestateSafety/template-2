@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+    
+        <h1>Manage Products</h1>
+        
+        <section class="admin-block space_xs_m-b-lg">
+            <h2 class="size-h4">Export Products</h2>
+            <p class="space_xs_m-b-lg">By pressing this button you will export the entire product database into a CSV format supported by Excel</p>
+            <div>
+                <form action="{{ path('admin_products_export') }}"><button>Export</button></form>
+            </div>
+        </section>
+
+        <section class="admin-block space_xs_m-b-lg">
+            <h2 class="size-h4">Import Products</h2>
+            <p class="space_xs_m-b-lg">This import takes the same file that was exported and updates any changed values in the database</p>
+            <div>
+                <form action="{{ path('admin_products_import') }}" enctype="multipart/form-data" method="post">
+                    <input type="file" name="import"><button>Import</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="admin-block space_xs_m-b-lg">
+            <h2 class="size-h4">Delete Products</h2>
+            <p class="space_xs_m-b-lg">This is an import that removes the products from the database that are sent in the file</p>
+            <div>
+                <form action="{{ path('admin_products_import') }}" enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="file" name="import"><button>Delete</button>
+                </form>
+            </div>
+        </section>
+    </div>
+{% endblock %}

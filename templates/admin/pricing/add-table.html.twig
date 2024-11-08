@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div id="content" class="content-size-x content-size-y ">
+
+        {# IF ADD TABLE #}
+        <h1 class="space_xs_m-b-sm">Add Pricing Table</h1>
+        {# IF EDIT TABLE  
+            <h1 class="space_xs_m-b-sm">Edit Pricing Table</h1>
+        #}
+        <p class="space_xs_m-b-xl">Use the form below to add a new pricing table. </p>
+
+        <form method="post" action="" name="add-edit-table">
+
+            <div class="flex-grid">
+            
+                <div class="flex-grid__col-md-10 space_xs_p-b-lg">
+                    <label>Pricing Table Name</label>
+                    {# IF ADD TABLE #}
+                    <input type="text" value="" placeholder="Example: 4 X 4 Labels on Heavy Weight Gloss Paper with Permanent Adhesive">
+                    <button type="button" class="button space_xs_m-a-none">Save</button>
+                    {# IF EDIT TABLE  
+                    <input type="text" value="4 X 4 Labels on Heavy Weight Gloss Paper with Permanent Adhesive">
+                    #}
+                </div>
+            {#  
+                <div class="flex-grid__col-md-4">
+
+                    <div class="form-row">
+                        <label class="t-align-left">Group Label</label>
+                        <input type="text" name="label">
+                    </div>
+                    <div class="form-row">
+                        <label>Qty (max quantity of this price group)</label>
+                        <input type="text" name="qty">
+                    </div>
+                    <div class="form-row">
+                        <label>Price</label>
+                        <input type="text" name="price">
+                    </div>
+
+                    <div class="form-row">
+                        <button type="button" class="button">Save Price Group</button>
+                    </div>
+
+                </div>
+                <div class="flex-grid__col-md-8 ">
+                    <label>Current Table</label>
+                    <table> 
+                        <thead>
+                            <tr>
+                            <th width="60%">Group Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">Adding information on the left will show up here</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="t-align-right">
+                        <button type="button" class="button">Done - Save Price Group</button>
+                    </div>
+                </div>
+            #}
+             
+            </div>
+        </form>
+    </div>
+ 
+{% endblock %}

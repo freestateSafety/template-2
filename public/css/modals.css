@@ -1,0 +1,22 @@
+
+/* modals.css */
+/* Overlay */
+/* modals.css */
+/* Overlay */
+#simplemodal-overlay {background-color:#000; cursor:wait;}
+
+#simplemodal-container {width:400px !important; min-height:150px !important; height:220px; color:#333; background:transparent; border:0px solid #444; padding:12px; box-sizing:content-box;}
+#simplemodal-container .simplemodal-data {padding:0px;}
+#simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
+#simplemodal-container a.modalCloseImg {width:25px; height:29px; display:none; z-index:3200; position:absolute; top:20px; right:10px; cursor:pointer;}
+#simplemodal-container h3 {font-size:14px; color:#333; margin-bottom:.8em;}
+/*** end simple modal styles ***/
+
+#modalDialog{background-color:transparent; display:none; overflow:hidden; box-sizing:content-box;}
+#modalDialog h1{background-color:#bddb8c; color:#333; height:35px; line-height:35px; vertical-align:middle; font-size:16px; font-weight:bold; border-top-left-radius:10px; border-top-right-radius:10px; text-align:center;margin:0px;border-bottom:1px solid #777; }
+#modalContent{padding:15px; background-color:#fff; border-bottom-left-radius:10px; border-bottom-right-radius:10px; }
+#modalDialog button{height:30px;}
+
+@media screen and (max-width:660px){
+    #simplemodal-container {width:90% !important; 
+}

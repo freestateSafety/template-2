@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal ">
+
+        <h2>Shopping Cart</h2>
+
+        {% if error is defined %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        <form id="mainCart" class="mainCart" method="post" action="{{ path('cart_update') }}">
+            <div id="cartContainer">
+                <table id="cart" class="cart-table" border="0" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="remove"></th>
+                            <th class="item no-mobile" nowrap>Item&nbsp;#</th>
+                            <th class="product">Product</th>
+                            <th class="pkgQty">Pkg&nbsp;Qty</th>
+                            <th class="qty">Qty</th>
+                            <th class="weight no-mobile">Weight</th>
+                            <th class="price no-mobile">Price</th>
+                            <th class="totals">Totals</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if cart is defined %}
+                            {% for product in cart.items %}
+                                <tr>
+                                    <td class="remove t-align-center">
+                                        <a aria-label="Remove {{ product.name }} from cart" id="removeBtn_{{ loop.index0 }}" class="removeBtn" href="#" data-id="{{ product.id }}">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                    <td class="no-mobile">{{ product.itemNumber }}</td>
+                                    <td class="">
+                                        {{ product.name }}
+                                        <span class="show-in-mobile"><br><b>Item:</b> {{ product.itemNumber }}</span>
+                                    </td>
+                                    <td class="">{{ product.quantity }}</td>
+                                    <td class="">
+                                        <input type="text" size="4" name="product[{{ product.id }}]" value="{{ cart.quantity(product.id) }}" class="t-align-center">
+                                    </td>
+                                    <td class="t-align-right  no-mobile">{{ product.weight * cart.quantity(product.id) }} lbs</td>
+                                    <td class="t-align-right  no-mobile">${{ product.price(cart.quantity(product.id))|number_format(2) }}</td>
+                                    <td class="t-align-right">
+                                        ${{ (product.price(cart.quantity(product.id)) * cart.quantity(product.id))|number_format(2) }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr id="shippingTotalRow" class="dark">
+                                <td id="shipWeightTotal" class="bkg-color-gray-lightest t-align-right" colspan="5"><b>Total Shipping Weight:</b></td>
+                                <td id="shipWeightAmount" class="bkg-color-gray-lightest t-align-right ">
+                                    {{ cart.weight }} lbs
+                                </td>
+                                <td class="t-align-right" colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td id="totalLabel" class="bkg-color-gray-lightest t-align-right total" colspan="7"><b>Total:</b></td>
+                                <td id="totalAmt" class="t-align-right total" colspan="2">${{ cart.total|number_format(2) }}</td>
+                            </tr>
+                        {% else %}
+                            <tr class="white">
+                                <td id="noItems" colspan="8" class="center">There are no items in the cart</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="buttonRow t-align-right">
+                <button type="button" id="continueShopping" name="continue" class="button button-secondary">Continue Shopping</button>
+                <button type="button" id="updateBtn" name="updateBtn" class="button button-secondary">Update</button>
+                <button type="submit" id="checkoutBtn" name="checkoutBtn" class="button btnSubmit">Checkout</button>
+            </div>
+        </form>
+
+        <form id="hiddenForm" name="hiddenForm" action="{{ path('cart_remove') }}" method="post">
+            <input type="hidden" name="product_id" id="del_itemNumber" value="">
+        </form>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script type="text/javascript">
+
+         function calcColumns(){
+            var vpWidth = $(window).width();
+            if (vpWidth <= 550){
+                console.log("below 550");
+                $("#cart .no-mobile, #shippingTotalRow").hide();
+                $("#totalLabel").attr("colspan","4");
+            } else {
+                console.log("above 550");
+                $("#cart .no-mobile, #shippingTotalRow").show();
+                $("#totalLabel").attr("colspan","6");
+            }
+        }
+
+        $(document).ready(function(){
+            //determine columns and set cart accordingly
+            calcColumns();
+
+            $(window).resize( function() {
+                calcColumns();
+            });
+
+            $("#updateBtn").click(function(e){
+                e.preventDefault();
+                console.log("update button");
+                $("#mainCart").submit();
+            });
+
+            $("#checkoutBtn").click(function(e){
+                e.preventDefault();
+                window.location.href = '{{ url('cart_register') }}';
+            });
+
+            $(".removeBtn").click(function(e){
+                console.log("removeBtn");
+                e.preventDefault();
+                var item = $(this).attr("data-id");
+                console.log("delete item: " + item);
+                $("#del_itemNumber").val(item);
+                $("#hiddenForm").submit();
+            });
+
+        });
+    </script>
+{% endblock %}

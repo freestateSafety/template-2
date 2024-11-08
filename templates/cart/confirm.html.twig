@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal ">
+
+        <h1>Order Confirmation</h1>
+        <div class="subhead space_xs_m-b-xl">
+            Please print this page for your records. A copy of your order will be emailed to you. 
+        </div>
+
+        {% if error is defined and error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <h3>Order Number: {{ order.number }}</h3>
+
+        <div class="flex-grid-gap  space_xs_m-b-lg">
+            <div id="shippingAddress" class="flex-gap__col-xs-12 flex-gap__col-md-4 ">
+                <h4>Shipping Address</h4>
+                <div>
+                    {{ customer.name }}<br>
+                    {% if customer.company %}{{ customer.company }}<br>{% endif %}
+                    {{ order.shipment.address|nl2br }}
+                </div>
+            </div>
+            <div id="billingAddress" class="flex-gap__col-xs-12 flex-gap__col-md-4 ">
+                <h4>Billing Address</h4>
+                <div>
+                    {{ customer.name }}<br>
+                    {% if customer.company %}{{ customer.company }}<br>{% endif %}
+                    {{ customer.addressesBilling.first|nl2br }}
+                </div>
+            </div>
+            <div id="paymentInfo" class="flex-gap__col-xs-12 flex-gap__col-md-4 ">
+                <h4>Payment Info</h4>
+                <div>
+                    {% if order.payment.method == 'card' %}
+                            {{ creditCard.name }}<br>
+                            {{ creditCard.numberMasked }}<br>
+                            Exp: {{ creditCard.expireMonth }}/{{ creditCard.expireYear }}<br>
+                    {% else %}
+                        An invoice will be sent to the address listed.
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <form id="mainCart" name="mainCart" action="{{ path('cart_review') }}" method="post">
+            <div id="cartContainer">
+                <table id="cartTable" border="0" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr class="">
+                            <th class="cartHead item" nowrap>Item&nbsp;#</th>
+                            <th class="cartHead product left">Product</th>
+                            <th class="cartHead pkgQty">Pkg&nbsp;Qty</th>
+                            <th class="cartHead qty">Qty</th>
+                            <th class="cartHead weight">Weight</th>
+                            <th class="cartHead price">Price</th>
+                            <th class="cartHead totals">Totals</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in order.products %}
+                        <tr class="white main">
+                            <td class="item">{{ product.itemNumber }}</td>
+                            <td class="product">
+                                {{ product.name }}
+                                <span class="show-in-mobile"><br><b>Item:</b> {{ product.itemNumber }}</span>
+                            </td>
+                            <td class="pkgQty">{{ product.product.quantity }}</td>
+                            <td class="qty t-align-right">{{ product.quantity }}</td>
+                            <td class="weight t-align-center">{{ product.weight * product.quantity }} lbs</td>
+                            <td class="price t-align-right">${{ product.price|number_format(2) }}</td>
+                            <td class="totals t-align-right">
+                                ${{ (product.price * product.quantity)|number_format(2) }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="6" class="t-align-right bkg-color-gray-lightest">
+                                <b>Shipping ({{ order.shipment.method }})</b>
+                            </td>
+                            <td class="t-align-right">${{ order.shipment.total|number_format(2) }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" id="totalLabel" class="t-align-right bkg-color-gray-lightest"><b>Total:</b></td>
+                            <td id="totalAmt" class="t-align-right">${{ order.payment.total|number_format(2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="buttonRow right">
+                <button id="continueShopping" type="button" name="continue" class="button button-secondary">Continue Shopping</button>
+                <a href="{{ path('user_dashboard') }}"><button type="button" class="button btnSubmit">Go to Dashboard</button></a>
+            </div>
+        </form>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    debug: '%kernel.debug%'
+    exception_controller: ~
+    globals:
+        site:
+            city: '%site.city%'
+            domain: '%site.domain%'
+            logo: '%site.logo%'
+            name: '%site.name%'
+            phone: '%site.phone%'
+            ph-short: '%site.ph-short%'
+            ph_short: '%site.ph-short%'
+            state: '%site.state%'
+            street: '%site.street%'
+            zip: '%site.zip%'
+            banner:
+              normal: '%site.banner.normal%'
+              small: '%site.banner.small%'
+              email: '%site.banner.email%'
+    strict_variables: '%kernel.debug%'
+
+when@test:
+    twig:
+        strict_variables: true

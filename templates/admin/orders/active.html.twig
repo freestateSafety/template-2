@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+
+        <h1>Active Orders</h1>
+        <p class="space_xs_m-b-xl">The following orders have been entered and are ready for fulfillment</p>
+
+        <table id="orders-current" class="data-table" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th><b>Order&nbsp;#</b></th>
+                    <th><b>Company</b></th>
+                    <th><b>Customer</b></th>
+                    <th><b>Order&nbsp;Date</b></th>
+                    <th><b>Order&nbsp;Time</b></th>
+                    <th><b>Totals</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    {% include 'fragments/order-list-item.html.twig' %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+{% endblock %}

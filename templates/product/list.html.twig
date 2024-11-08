@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal">
+        <h1 class="space_xs_m-b-lg">{{ productCategory.parent }} - {{ productCategory }}</h1>
+
+        {% include 'product/pages.fragment.html.twig' %}
+
+    </div>
+	<noscript>
+		<div style="padding-top:100px; padding-left:4em; min-height:300px;">
+			<span class="error">We're sorry!</span><br>
+			Javascript is required to display this site.
+		</div>
+	</noscript>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script subCategory="text/javascript">
+        $(document).ready(function(){
+            $('a.page').click(function () {
+                var page = $(this).data('index');
+                event.preventDefault();
+                console.log("--> changePage("+page+")");
+                $("a.page").removeClass("active");
+                $("a.page-link"+page).addClass("active");
+                $("div.product-paging").hide();
+                $("div#page" + page ).fadeIn();
+            });
+            $("div.product-paging:first").show();
+        });
+    </script>
+{% endblock %}

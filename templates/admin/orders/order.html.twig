@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+
+        <h1>Order Detail</h1>
+
+        {% if order.deleted %}
+            <div class="error">
+                <h3>DELETED</h3>
+            </div>
+        {% endif %}
+
+        <div class="flex-grid space_xs_m-b-xl">
+
+            <div id="customerInfo" class="flex-grid__col-xs-12 space_xs_m-b-xl">
+                <h2 class="size-h4">Customer Information</h2>
+                <div>
+                    {% if order.customer.company %}
+                        <b>Company:</b> {{ order.customer.company }}<br>
+                    {% endif %}
+                    <b>Contact:</b> {{ order.customer.name }}<br>
+                    <b>Phone:</b> <a href="tel:{{ order.customer.phone }}">{{ order.customer.phone|phone }}</a><br>
+                    <b>Email:</b> <a href="mailto:{{ order.customer.email }}">{{ order.customer.email }}</a><br>
+                </div>
+                <div>
+                    <b>Order Number:</b> {{ order.number }}
+                </div>
+            </div>
+
+            <div id="shippingAddress" class="flex-grid__col-xs-12 flex-grid__col-md-4">
+                <h2 class="size-h4">Shipping Address</h2>
+                <p>{{ order.shipment.address|nl2br }}</p>
+            </div>
+            <div id="billingAddress" class="flex-grid__col-xs-12 flex-grid__col-md-4">
+                <h2 class="size-h4">Billing Address</h2>
+                <p>{{ order.customer.addressesBilling.first|nl2br }}</p>
+            </div>
+            <div id="paymentInfo" class="flex-grid__col-xs-12 flex-grid__col-md-4">
+                <h2 class="size-h4">Payment Info</h2>
+                <p>
+                    {% if order.payment.method == 'card' %}
+                            {{ creditCard.name }}<br>
+                            {% if not order.deleted and not order.fulfilled %}
+                            {{ creditCard.number }}<br>
+                            CVV: {{ creditCard.cvv }}<br>
+                            {% else %}
+                            {{ creditCard.numberMasked }}<br>
+                            {% endif %}
+                            Exp: {{ creditCard.expireMonth }}/{{ creditCard.expireYear }}
+                            <br>
+                    {% else %}
+                        An invoice will be sent to the address listed.
+                    {% endif %}
+                </p>
+
+            </div>
+        </div>
+
+        <div id="cartContainer">
+            <form id="mainCart" name="mainCart" action="{{ path('admin_orders_save', {id: order.id}) }}" method="post">
+                <input type="hidden" name="_method" value="PUT">
+                <table id="cartTable" border="0" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="cartHead item" nowrap>Item&nbsp;#</th>
+                            <th class="cartHead product left">Product</th>
+                            <th class="cartHead pkgQty">Pkg&nbsp;Qty</th>
+                            <th class="cartHead qty">Qty</th>
+                            <th class="cartHead weight">Weight</th>
+                            <th class="cartHead price">Price</th>
+                            <th class="cartHead totals">Totals</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in order.products %}
+                        <tr class="bkg-color-white">
+                            <td class="item">{{ product.itemNumber }}</td>
+                            <td class="product">{{ product.name }}</td>
+                            <td class="pkgQty">{{ product.product.quantity|default('Unknown') }}</td>
+                            <td class="qty t-align-center">{{ product.quantity }}</td>
+                            <td class="weight t-align-right">{{ product.weight }} lbs</td>
+                            <td class="price t-align-right">${{ product.price|number_format(2) }}</td>
+                            <td class="totals t-align-right">${{ product.total|number_format(2) }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td id="shipWeightTotal" class="bkg-color-gray-lightest t-align-right" colspan="4"><b>Total Shipping Weight</b></td>
+                            <td id="shipWeightAmount" class="t-align-right">{{ order.weight|number_format(2) }}&nbsp;lbs</td>
+                            <td id="shipRowBlank" colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td id="shippingType" class="bkg-color-gray-lightest t-align-right" colspan="6">
+                                Shipping via <b>{{ order.shipment.method }}</b>
+                            </td>
+                            <td id="shippingType" class="t-align-right">
+                                <b class="show-in-mobile">Total Shipping Amount: </b>${{ order.shipment.total|number_format(2) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="totalLabel" class="bkg-color-gray-lightest t-align-right total" colspan=6><b>Total Amount:</b></td>
+                            <td id="totalAmt" class="t-align-right total">${{ order.payment.total|number_format(2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {% if not order.deleted and not order.fulfilled %}
+                    <div class="space_xs_m-b-lg">
+                        <h2 class="size-h4">Notes to Customer</h2>
+                        <p>
+                            This field will be included in the Order Fulfilled email that gets sent to the
+                            customer when you click the Completed button below to close out this order.
+                        </p>
+                        <textarea name="notes" rows="4" cols="65">{{ order.notes }}</textarea>
+                    </div>
+
+                    <div class="space_xs_m-b-lg">
+                        {% if false %}
+                            <div id="customerShippingOption" class="orderInfo">
+                                <h2 class="size-h4">Customer Shipping Information</h2>
+                                <div class="orderDetail">
+                                    <table>
+                                        <tr>
+                                            <td><b>Shipping Company:</b></td>
+                                            <td>FedEx</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Account Number:</b></td>
+                                            <td>XYZ12345667</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        {% else %}
+                            <h2 class="size-h4">UPS Tracking Number</h2>
+                            <input type="text" name="tracking_number" value="{{ order.shipment.trackingNumber }}" size="35">
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+
+                <div class="buttonRow t-align-right">
+
+                    <a href="{% if order.fulfilled %}{{ path('admin_orders_fulfilled') }}{% elseif order.deleted %}{{ path('admin_orders_deleted') }}{% else %}{{ path('admin_orders_active') }}{% endif %}"><button id="back" name="back" class="button button-secondary" type="button">Back</button></a>
+                    {% if not order.deleted and not order.fulfilled %}
+                        <button id="delete" name="delete" class="button button-secondary" type="button">Delete Order</button>
+                        <button id="completeEmail" type="submit" name="complete" class="button button-secondary" value="email">Complete with Email</button>
+                        <button id="submitBtn" name="complete" class="button btnSubmit">Complete Order</button>
+                    {% endif %}
+
+                </div>
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        (function ($) {
+            $('#delete').click(function () {
+                if (confirm('Are you sure you want to delete this order?')) {
+                    $('#mainCart').attr('action', '{{ path('admin_orders_delete', {id: order.id}) }}')
+                            .find('input[name=_method]').val('DELETE');
+                    $('#mainCart').submit();
+                }
+            });
+        }(jQuery));
+    </script>
+{% endblock %}

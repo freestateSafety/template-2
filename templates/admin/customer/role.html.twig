@@ -1,0 +1,70 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    {% set ROLE_ADMIN = 'Admin access allows the customer access to the admin area. They will not be allowed to create other admin users or browse the site as other users.' %}
+    {% set ROLE_SUPER_ADMIN = 'Super admin access allows the same access as Admin. Super admins have the ability to create other admin users as well as view the site as any other customer.' %}
+    
+    <div id="contentInternal" class="content-internal admin">
+        <h2>Users with Admin Access</h2>
+        <h4>Admin Access</h4>
+        <p>{{ ROLE_ADMIN }}</p>
+        
+        <h4>Super Admin Access</h4>
+        <p>{{ ROLE_SUPER_ADMIN }}</p>
+        <br>
+        
+        <h4>All current users with any level of Admin Access</h4>
+        <table id="customer" class="data-table" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Admin Name</th>
+                    <th>dmin Email</th>
+                    <th>Admin Role</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for customer in users %}
+                <tr data-id="{{ customer.id }}">
+                    <td>
+                        <a class="button small-button" href="{{ path('admin_customer_show', {id: customer.id}) }}" title="Edit Customer">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <button title="Revoke ALL Admin Access" class="button revoke small-button" style="display: none;">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                    </td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td {% if customer.role == 'ROLE_ADMIN' %}title="{{ ROLE_ADMIN }}"{% else %}title="{{ ROLE_SUPER_ADMIN }}"{% endif %}>
+                        {{ customer.role|replace({'ROLE_':'','_':' '})|title }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+    <script type="text/javascript">
+        (function ($) {
+            $('#customer').on('click', 'button.revoke', function () {
+                var row = $(this).parent().parent().parent(),
+                    name = $(row).find('td:nth-child(2)').text();
+                if (confirm('Are you sure you want to remove ALL admin privileges from ' + name + '?')) {
+                    var id = $(row).data('id'),
+                        form = $('<form></form>');
+                    $(document.body).append($(form));
+                    $(form).attr('method', 'POST').attr('action', '/admin/customer/' + id)
+                            .append($('{{ form_widget(customerForm._token) }}'))
+                            .append($('<input>').attr('name', '_method').val('PATCH'))
+                            .append($('<input>').attr('name', 'customer[role]').val('ROLE_USER'))
+                            .submit()
+                    ;
+                }
+            }).find('button.revoke').show();
+        })(jQuery);
+    </script>
+{% endblock %}

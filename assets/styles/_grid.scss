@@ -1,0 +1,140 @@
+@use "sass:math";
+
+$break-xs: 320px;
+$break-sm: 480px;
+$break-md: 680px;
+$break-lg: 1024px;
+$break-xl: 1440px;
+
+$gap: 16px;
+// Breakpoints for media queries defined here. To learn more: https://eduardoboucas.github.io/include-media/
+$breakpoints: (
+	xs: $break-xs,
+	sm: $break-sm,
+	md: $break-md,
+	lg: $break-lg,
+	xl: $break-xl,
+);
+$gaplist: (
+	xs: 4px,
+	sm: 8px,
+	md: 12px,
+	lg: 16px,
+	xl: 32px,
+);
+$gridpoints: (
+	/* the pix size the breakpoint starts at */
+	xs: 0,
+	sm: 479px,
+	md: 679px,
+	lg: 1023px,
+	xl: 1440px
+);
+// List Variable to create 12 column grid
+$columnlist: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12;
+
+.flex-grid {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	/* needed to get headings to act like block elements and span 100% of parent container */
+	h1, h2, h3, h4, h5, h6 {
+		flex-basis: 100%;
+	}
+};
+
+
+// Column Mixin 
+@mixin make-gap($gapSize) {
+	gap: $gapSize;
+}
+@mixin make-column($col-count) {
+	$columns: 12;
+	$max-col-width: math.percentage( math.div($col-count,$columns) );
+	flex-basis: $max-col-width;
+	max-width: $max-col-width;
+}
+@mixin make-gap-column($col-count,$gap) {
+	$columns: 12;
+	$max-col-width: math.percentage( math.div($col-count,$columns) );
+	flex-basis: calc($max-col-width - $gap);
+	max-width: calc($max-col-width - $gap);
+}
+
+// Creates column classes for ALL breakpoints
+@each $break,$pixels in ($gridpoints) {
+	@media (min-width: $pixels ) {
+		@each $col-count in ($columnlist) {
+			.flex-grid__col-#{$break}-#{$col-count} {
+				@include make-column($col-count);
+			}
+		}
+	}
+}
+
+.flex-grid-gap {
+	@each $break,$pixels in ($gridpoints) {
+		@media (min-width: $pixels ) {
+			@each $col-count in ($columnlist) {
+				.flex-gap__col-#{$break}-#{$col-count} {
+					@include make-gap-column($col-count,$gap);
+				}
+			}
+		}
+	}
+}
+
+
+
+// Creates class for FLEX CONTAINER with GAP
+.flex-grid-gap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+//home page
+.flex-grid-gap {
+	div[class^="flex-gap__col-"]{
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+}
+.flex-grid-gap {
+	div[class^="flex-grid__col-"]{ 
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+}
+
+.flex-grid,.flex-grid-gap {
+	&.flex-wrap-wrap { flex-wrap: wrap; }
+	&.flex-wrap-nowrap { flex-wrap: nowrap; }
+	&.flex-wrap-reverse { flex-wrap: wrap-reverse; }
+
+	&.flex-justify-start { justify-content: flex-start; }
+	&.flex-justify-end { justify-content: flex-end; }
+	&.flex-justify-center { justify-content: center ; }
+	&.flex-justify-between { justify-content: space-between; }
+	&.flex-justify-around { justify-content: space-around; }
+	&.flex-justify-evenly { justify-content: space-evenly; }
+
+	&.flex-align-start { align-items: flex-start; }
+	&.flex-align-end { align-items: flex-end; }
+	&.flex-align-center { align-items: center; }
+	&.flex-align-stretch { align-items: stretch; }
+	&.flex-align-baseline { align-items: baseline; }
+
+	&.flex-align-content-start { align-content: flex-start }
+	&.flex-align-content-end { align-content: flex-start }
+	&.flex-align-content-center { align-content: center }
+	&.flex-align-content-stretch { align-content: stretch }
+	&.flex-align-content-between { align-content: space-between }
+	&.flex-align-content-around { align-content: space-around }
+
+	.flex-grow {
+		flex-grow: 1;
+	}
+
+}

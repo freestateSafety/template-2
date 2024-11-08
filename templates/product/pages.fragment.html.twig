@@ -1,0 +1,82 @@
+
+ {% if materials is defined and materials %}
+    <div id="materialList" class="space_xs_m-b-md">
+        <form method="get" action="{{ path('product_list', {parent_id: productCategory.parent.id, id: productCategory.id}) }}">
+            <select id="material" name="material" onChange="submit();" class="width-auto">
+                <option value>Show All Materials</option>
+                {% for material in materials %}
+                    <option value="{{ material.id }}"{% if app.request.get('material') == material.id %} selected{% endif %}>{{ material.material }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+{% endif %}
+
+<div id="pagingContainer" class="paging-containter space_xs_m-b-lg">
+    <div id="pagingTop" class="paging">
+        <h6 class="space_xs_m-b-none">Pages: </h6>
+        <nav aria-label="pagination"  class="page-list">
+            {% if pages|length > 1 %}
+                {% for i in range(1, pages|length) %}
+                    {% if loop.index == 1 %}
+                        <a href="#" class="page page-link{{ loop.index }} active" data-index="{{ loop.index }}">{{ loop.index }}</a>
+                    {% else %}
+                        <a href="#" class="page page-link{{ loop.index }}" data-index="{{ loop.index }}">{{ loop.index }}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </nav>
+    </div>
+</div>
+
+{% for page in pages %}
+    <div id="page{{ loop.index }}" class="product-paging">
+        <div class="product-list">
+        {% for product in page %}
+            
+            <div id="{{ product.id }}" class="product-container" itemscope itemsubCategory="http://schema.org/Product">
+                
+                <div class="product-detail">
+                    <h2 class="heading size-h6">
+                        <a href="{{ path('product_item', {id: product.id}) }}"><span itemprop="name">{{ product.name }}</span></a>
+                    </h2>
+                    <div class="price ">
+                        <span class="label">Price:</span>
+                        <span class="nowrap price">${{ product.price }}</span>
+                    </div>
+                    <div class="image-container">
+                        <a class="image-link linkToProduct" href="{{ path('product_item', {id: product.id}) }}">
+                            <img class="image" itemprop="image" src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.name }}">
+                        </a>
+                    </div>
+                    <div class="detail space_xs_p-b-sm">
+                        <span class="label">Item&nbsp;#:</span>
+                        <span class="nowrap prod-id" itemprop="productID">{{ product.itemNumber }}</span>
+                    </div>
+                    <div class="quickview-container  color-white">
+                        <div data-url="{{ path('product_item', {id: product.id}) }}?overlay=1" class="quickview-link t-align-right color-white">Quick View </div>
+                        <div data-url="{{ path('product_item', {id: product.id}) }}?overlay=1" class="quickview-link-icon material-symbols-outlined ">add_circle</div>
+                    </div>
+                </div>
+                
+            </div>
+            
+        {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+
+<div id="pagingBottom" class="paging space_xs_m-t-lg">
+    <h6 class="space_xs_m-b-none">Pages: </h6>
+    <nav aria-label="pagination"  class="page-list">
+        {% if pages|length > 1 %}
+            {% for i in range(1, pages|length) %}
+                {% if loop.index == 1 %}
+                    <a href="#" class="page page-link{{ loop.index }} active" data-index="{{ loop.index }}">{{ loop.index }}</a>
+                {% else %}
+                    <a href="#" class="page page-link{{ loop.index }}" data-index="{{ loop.index }}">{{ loop.index }}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

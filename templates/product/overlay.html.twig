@@ -1,0 +1,91 @@
+
+<div class="overlay-container">
+    <input type="text" name="top" id="top" width="1" height="1" style="border:none; height: 1px; width:1px; padding:0px; ">
+
+    <h3 itemprop="name">{{ product.name }}</h3>
+    <p class="description" itemprop="description">{{ product.productCategory }} printed on {{ product.material }}</p>
+
+    <div class="main-block">
+        <div id="imageArea" class="prod-image-container">
+            <img itemprop="image" id="productImg" src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.name }}">
+        </div>
+
+        <div class="prod-detail-area">
+
+            <table id="prodTopInfo" class="product-details-table">
+                <tr class="detailItem first">
+                    <td class="nowrap"><b>Item Number:</b></td>
+                    <td><span itemprop="productID">{{ product.itemNumber }}</span></td>
+                </tr>
+                <tr class="detailItem" itemprop="additionalProperty" itemscope itemtype="http://schema.org/PropertyValue">
+                    <td><b><span itemprop="name">Dimensions</span>:</b></td>
+                    <td><span itemprop="value">{{ product.size }}</span></td>
+                </tr>
+
+                {% if product.class %}
+                    <tr class="detailItem" itemprop="additionalProperty" itemscope
+                        itemtype="http://schema.org/PropertyValue">
+                        <td class="inline"><b><span itemprop="name">Class</span>: </b></td>
+                        <td class="inline"><span itemprop="value">{{ product.class }}</span></td>
+                    </tr>
+                {% endif %}
+                {% if product.weight %}
+                    <tr class="detailItem">
+                        <td class="inline"><b>Weight: </b></td>
+                        <td class="inline"><span itemprop="weight">{{ product.weight }} lbs</span></td>
+                    </tr>
+                {% endif %}
+                <tr class="detailItem first">
+                    <td class="inline"><b>Availability:</b></td>
+                    <td class="inline">In Stock</td>
+                </tr>
+            </table>
+
+            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                <form method="post" action="{{ path('cart_add') }}">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+
+                    <div id="notes">{{ product.notes }}</div>
+
+                    {% if product.weight %}
+                        <div id="orderBtnRow" class="space_xs_m-b-lg">
+                            <div id="orderForm" >
+                                <label for="qty">QTY</label>
+                                <input id="qty" type="text" name="quantity" value="1" min="1" size="5" style="width:auto; margin: 0px; height:35px;">
+                                <input id="overlay_addToCart" type="submit" class="button" value="Add" tabindex="1" autofocus="autofocus" style="margin:0;">
+                            </div>
+                        </div>
+                    {% else %}
+                        <h3>To order this product call 1-800-997-6120</h3>
+                    {% endif %}
+                </form>
+                
+            </div>
+        </div>
+    </div>
+    <table id="pricingTable" class="overlay-price-table" border="0">
+        <thead>
+            <tr>
+                <th>Quantity</th>
+                <th>Price per Pack / Roll</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quantity in product.quantities %}
+            <tr>
+                <td>{{ quantity.label }}</td>
+                <td>
+                    <meta itemprop="priceCurrency" content="USD"/>
+                    $<span itemprop="price">{{ quantity.price }}</span>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<!-- overlayContainer -->
+
+<script>
+    $("#top").focus();
+</script>

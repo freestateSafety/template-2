@@ -1,0 +1,72 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function () {
+            $('#select-all').click(function () {
+                if (this.checked) {
+                    $(':checkbox').each(function () {
+                        this.checked = true;
+                    });
+                } else {
+                    $(':checkbox').each(function () {
+                        this.checked = false;
+                    })
+                }
+            });
+
+            $(':checkbox').click(function () {
+                if (this.checked || $(':checkbox:checked').length > 0) {
+                    $('input[type=submit]').removeAttr('disabled');
+                } else {
+                    $('input[type=submit]').attr('disabled', 'disabled');
+                }
+            });
+        })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        ul {
+            list-style: none;
+            position: relative;
+        }
+
+        li.product > a {
+            left: 0;
+            position: absolute;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+        <h2>{{ material.material }}</h2>
+        <p>The material {{ material.material }} is tied to {{ material.products.count }} products listed below.</p>
+        <h4>New Material</h4>
+        <p>Use the select box to reassign all products using this material to another material.</p>
+        <form method="post">
+            <div class="formRow">
+                <select name="parent">
+                    {% for m in materials %}
+                        <option value="{{ m.id }}">{{ m.material }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="formRow">
+                <button type="submit" class="button" disabled>Move Selected Products</button>
+                <a href="{{ path('admin_materials') }}"><button type="button" class="button button-secondary">Back To Materials</button></a>
+            </div>
+            <h4>Product List</h4>
+            <ul>
+                <li><input type="checkbox" id="select-all"> Select All</li>
+            {% for product in material.products %}
+                <li class="product"><a href="{{ url('admin_products_update', {'id': product.id}) }}">View</a> <input type="checkbox" name="products[]" value="{{ product.id }}"> {{ product.name }}</li>
+            {% endfor %}
+            </ul>
+        </form>
+    </div>
+{% endblock %}

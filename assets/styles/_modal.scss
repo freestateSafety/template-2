@@ -1,0 +1,86 @@
+
+/**** MODAL STYLES ****/
+#simplemodal-overlay { background-color:#FFF; } /* Page Overlay */
+
+/* Modal Styles */
+#simplemodal-container {
+    height: 70vh; 
+    width: calc(80vw); 
+    margin: 0 auto;
+    background-color: #FFF; 
+    border:3px solid #444; 
+    padding: 0px;
+}
+@media screen and ( min-width: $break-md ) {
+    #simplemodal-container {
+
+        height: 70vh;
+        width: 60vw;
+    }
+}
+
+#simplemodal-container .simplemodal-data {overflow:hidden;}
+#simplemodal-container a.modalCloseImg {cursor:pointer; background:url('/public/images/x_close.png') no-repeat; width:31px; height:30px; display:inline; z-index:3200; position:absolute; top:-10px; right:-10px; cursor:pointer;}
+/**** END MODAL OVERLAY ****/
+
+/**** MODAL productOverlay *****/
+#productOverlay {
+    display: none; 
+    height: auto; 
+    width: 100%; 
+    margin:0 auto; 
+    padding: 20px; 
+    padding-top:10px;
+    overflow: hidden; 
+}
+#overlayContainer{overflow:hidden;}
+
+.overlay-container {
+    .main-block { display: block; }
+    .product-details-table {
+        td { padding: 0px 3px;}
+    }
+    .prod-image-container {
+        width: 55%;
+        margin: auto;   
+        img { width: 100%; }
+    }
+    .overlay-price-table {
+        th,td { font-size: 14px; }
+    }
+    /*
+    #prodDetailArea{width:65%; height:auto; margin:0; float:right; overflow:hidden; font-size:12px;}
+    #overlayContainer #prodDetailArea h3{font-size:1.5em; margin:1em center center 0;}
+    #overlayContainer #prodDetailArea h3 a{text-decoration:none; color:#333;}
+    #overlayContainer #prodDetailArea .detailItem{padding:.2em .2em .2em 0;}
+    #overlayContainer #prodDetailArea .detailItem td.inline{display:table-cell; float:none;}
+    
+    #overlayContainer #prodDetailArea .detailItem b{padding-right:1em; min-width:105px; text-align:right; display:inline-block;}
+    #overlayContainer #prodDetailArea .detailItem.first{margin-top:.5em;}
+    #overlayContainer input#qty{}
+    */
+    
+}
+
+@media screen and ( min-width: $break-md ) {
+    .overlay-container {
+        .description{ margin-bottom: 2rem;}
+        .main-block{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: stretch;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+        .prod-image-container {
+            flex-basis: 35%;
+            margin: 0;
+            img { width: 100%; }
+        }
+        .prod-detail-area {
+            flex-basis: 65%;
+        }
+    }
+}

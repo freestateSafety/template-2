@@ -1,0 +1,77 @@
+@import 'include-media';
+
+$base-size: 1rem;
+
+$break-list: (
+    xs: 0,      // 0px - 479px
+    sm: 479px,  // 500px - 599px
+    md: 599px,  // 600px - 1023px
+    lg: 1023px, // 1024px - 1439px
+    xl: 1440px  // 1440px and up
+);
+$size-list: 'xs','sm', 'md', 'lg', 'xl';
+$space-list: (
+    'none': 0,
+    'xs': 0.25,
+    'sm': .5,
+    'md': 1,
+    'lg': 1.5,
+    'xl': 2,
+);
+$position-list: (
+    '': 'a',
+    'top': 't',
+    'right': 'r',
+    'bottom': 'b',
+    'left': 'l',
+    'horiz': 'h',
+    'vert': 'v',
+);
+
+// SET PADDING CLASSES
+@mixin output-padding($name, $pos, $break, $space, $increase) {
+    .space_#{$break}_p-#{$pos}-#{$space} {
+        @if $pos == 'h' {
+            padding-left: $base-size * $increase;
+            padding-right: $base-size * $increase;
+        } @else if $pos == 'v' {
+            padding-top: $base-size * $increase;
+            padding-bottom: $base-size * $increase;
+        } @else {
+            @if $pos =='a' {
+                padding: $base-size * $increase;
+            } @else {
+                padding-#{$name}: $base-size * $increase;
+            }
+        }
+    }
+}
+// SET MARGIN CLASSES
+@mixin output-margin($name, $pos, $break, $space, $increase) {
+    .space_#{$break}_m-#{$pos}-#{$space} {
+        @if $pos == 'h' {
+            margin-left: $base-size * $increase;
+            margin-right: $base-size * $increase;
+        } @else if $pos == 'v' {
+            margin-top: $base-size * $increase;
+            margin-bottom: $base-size * $increase;
+        } @else {
+            @if $pos =='a' {
+                margin: $base-size * $increase;
+            } @else {
+                margin-#{$name}: $base-size * $increase;
+            }
+        }
+    }
+}
+
+@each $break, $size in ($break-list) {
+    @include media('>#{$break}') {
+        @each $name, $pos in ($position-list) {
+            @each $space, $increase in ($space-list) {
+                @include output-padding($name, $pos, $break, $space, $increase);
+                @include output-margin($name, $pos, $break, $space, $increase);
+            }
+        }
+    }
+}

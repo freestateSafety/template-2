@@ -1,0 +1,70 @@
+version: "3"
+
+services:
+  adminer:
+    container_name: adminer
+    depends_on:
+      - db
+    image: adminer
+    ports:
+      - "8080:8080"
+  db:
+    container_name: db
+    environment:
+      - MYSQL_DATABASE=freestatesafety
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_ROOT_PASSWORD=password
+    image: mysql:8.0
+    platform: linux/x86_64
+    ports:
+      - "3306"
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 26677
+        hard: 46677
+    volumes:
+      - db_data:/var/lib/mysql
+  fpm:
+    build:
+      context: ./docker/fpm/
+      dockerfile: Dockerfile
+    container_name: fpm
+    depends_on:
+      - db
+      - mailer
+    environment:
+      - APP_ENV=dev
+    ports:
+      - "9000"
+    volumes:
+      - app_data:/var/www
+      - ./docker/fpm/xdebug-custom.ini:/usr/local/etc/php/conf.d/xdebug-custom.ini
+###> symfony/mailer ###
+  mailer:
+    container_name: mailer
+    image: schickling/mailcatcher
+    ports: ["1025", "1080:1080"]
+###< symfony/mailer ###
+  web:
+    build:
+      context: ./docker/nginx/
+      dockerfile: Dockerfile
+    container_name: web
+    depends_on:
+        - fpm
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes_from:
+      - fpm
+
+volumes:
+  app_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./
+  db_data:
+    driver: local

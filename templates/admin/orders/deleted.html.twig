@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+
+        <h2>Deleted Orders</h2>
+        <p>The last 10 orders that were deleted without fulfillment</p>
+
+        <br>
+
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th align="center"><b>Order&nbsp;#</b></th>
+                <th align="left" nowrap=""><b>Company</b></th>
+                <th align="left" nowrap=""><b>Customer</b></th>
+                <th align="center"><b>Order&nbsp;Date</b></th>
+                <th align="center"><b>Order&nbsp;Time</b></th>
+                <th align="left"><b>Totals</b></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if orders != null %}
+                {% for order in orders %}
+                    {% include 'fragments/order-list-item.html.twig' %}
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="7" class="space_xs_p-a-md">No orders have been deleted</td></tr>
+            {% endif %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}

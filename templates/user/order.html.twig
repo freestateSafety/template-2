@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal">
+
+
+        <h3>My Account - Order Detail</h3>
+
+        <br>
+
+        <table class="orderHistory" border="0" cellpadding="0" cellspacing="0">
+            <colgroup>
+                <col width="6%"/>
+                <col width="70%"/>
+                <col width="6%"/>
+                <col width="6%"/>
+                <col width="6%"/>
+                <col width="6%"/>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Item&nbsp;#</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Weight</th>
+                    <th>Price</th>
+                    <th>Totals</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in order.products %}
+                    <tr class="bkg-color-white">
+                        <td nowrap>
+                            {% if product.product %}
+                            <form method="post" action="{{ path('cart_add') }}" style="display: inline-block;">
+                                <input type="hidden" name="product_id" value="{{ product.product.id }}">
+                                <input type="hidden" name="quantity" value="{{ product.quantity }}">
+                                <button class="small-button" type="submit">Re-Order</button>
+                            </form>
+                            {% endif %}
+                            {{ product.itemNumber }}
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td class="t-align-center">{{ product.quantity }}</td>
+                        <td class="t-align-right">{{ product.weight }}</td>
+                        <td class="t-align-right">${{ product.price|number_format(2) }}</td>
+                        <td class="t-align-right">${{ product.total|number_format(2) }}</td>
+                    </tr>
+                {% endfor %}
+
+                <tr class="shippingRow">
+                    <td colspan="5" class="bkg-color-gray-lightest t-align-right">
+                        <b>Shipping ({{ order.shipment.method }})</b>
+                    </td>
+                    <td class="t-align-right">${{ order.shipment.total|number_format(2) }}</td>
+                </tr>
+                {% if order.fulfilled and order.shipment.trackingNumber %}
+                    <tr class="shippingRow">
+                        <td colspan="4" class="bkg-color-gray-lightest t-align-right">
+                            <b>Tracking Number</b>
+                        </td>
+                        <td colspan="2" align="right">
+                            <a target="_blank" href="http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums={{ order.shipment.trackingNumber }}">
+                                {{ order.shipment.trackingNumber }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
+                <tr class="totalRow">
+                    <td colspan="5" class="bkg-color-gray-lightest t-align-right">
+                        <b>Total:</b>
+                    </td>
+                    <td class="t-align-right">
+                        ${{ order.payment.total|number_format(2) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+{% endblock %}

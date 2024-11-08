@@ -1,0 +1,118 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+        {% for success in app.session.flashBag.get('success') %}
+            <div class="success">{{ success }}</div>
+        {% endfor %}
+        {% for error in app.session.flashBag.get('error') %}
+            <div class="error">{{ error }}</div>
+        {% endfor %}
+        <table class="adminProductTable" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+            <tr>
+                <th>
+                    <button type="button" class="small-button add" title="Add new material"><span class="fa fa-plus"></span></button>
+                </th>
+                <th align="center" nowrap>Material Id</th>
+                <th width="80%" nowrap>Material Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="blank" class="hidden">
+                <td nowrap>
+                    <button type="button" class="small-button save"><span class="fa fa-save"></span></button>
+                    <button type="button" class="small-button cancel"><span class="fa fa-remove"></span></button>
+                </td>
+                <td align="center">&lt;NEW&gt;</td>
+                <td class="editable"><input type="text" size="40"></td>
+            </tr>
+            {% for material in materials %}
+                <tr data-id="{{ material.id }}">
+                    <td nowrap>
+                        <button type="button" class="small-button edit" data-action="{{ path('admin_materials_save', {'id': material.id}) }}"><span class="fa fa-edit"></span></button>
+                        <a href="{{ path('admin_materials_show', {'id': material.id}) }}"><button type="button" class="small-button move"><span class="fa fa-object-group"></span></button></a>
+                        <button type="button" class="small-button remove" data-action="{{ path('admin_materials_delete', {'id': material.id}) }}">
+                            <span class="fa fa-trash"></span>
+                        </button>
+                    </td>
+                    <td align="center">{{ material.id }}</td>
+                    <td class="editable">{{ material.material }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        function resetElement(value)
+        {
+            var row = $(this).parent().parent();
+            var editable = $(row).find('.editable');
+
+            if (!$(row).data('id')) {
+                $(row).remove();
+            }
+
+            if (value == undefined) {
+                value = $(editable).find('input').val();
+            }
+
+            $(editable).text(value);
+            $(row).find('.save').removeClass('save').addClass('edit').find('.fa-save').removeClass('fa-save')
+                    .addClass('fa-edit');
+            $(row).find('.cancel').removeClass('cancel').addClass('remove').find('.fa-remove')
+                    .removeClass('fa-remove').addClass('fa-trash');
+            $(this).removeData('original');
+            $('.edit').removeAttr('disabled');
+        }
+
+        (function ($) {
+            $('.adminProductTable').on('click', '.add', function () {
+                var newRow = $('#blank').clone();
+                $('.adminProductTable').find('tbody').append($(newRow));
+                $(newRow).removeClass('hidden').removeAttr('id').find('input').focus();
+                $('.edit').attr('disabled', 'disabled');
+            }).on('click', '.cancel', function () {
+                resetElement.call(this, $(this).data('original'));
+            }).on('click', '.edit', function () {
+                var row = $(this).parent().parent();
+                var editable = $(row).find('.editable');
+                $(this).data('original', $(editable).text());
+                $(editable).html($('<input>').attr('size', 30).val($(editable).text()));
+                $(row).find('.edit').removeClass('edit').addClass('save').find('.fa-edit')
+                        .removeClass('fa-edit').addClass('fa-save');
+                $(row).find('.remove').removeClass('remove').addClass('cancel').find('.fa-trash')
+                        .removeClass('fa-trash').addClass('fa-remove');
+                $('.edit').attr('disabled', 'disabled');
+            }).on('click', '.remove', function () {
+                var material = $(this).parent().parent().find('.editable').text();
+                if (confirm('Are you sure you want to remove ' + material)) {
+                    var form = $('<form></form>')
+                            .attr('action', $(this).data('action'))
+                            .attr('method', 'POST')
+                            .html($('<input>').attr('type', 'hidden').attr('name', '_method').val('DELETE'));
+                    $(document.body).append(form);
+                    $(form).submit();
+                }
+            }).on('click', '.save', function () {
+                var value = $(this).parent().parent().find('.editable input').val();
+                var form = $('<form></form>')
+                        .attr('method', 'POST')
+                        .html('{{ form_widget(form._token) }}')
+                        .append($('<input>').attr('type', 'text').attr('name', 'material[material]').val(value));
+                if ($(this).data('action')) {
+                    $(form).append($('<input>').attr('type', 'hidden').attr('name', '_method').val('PUT'))
+                            .attr('action', $(this).data('action'));
+                } else {
+                    $(form).attr('action', '{{ path('admin_materials_create') }}')
+                }
+                $(document.body).append(form);
+                $(form).submit();
+                resetElement.call(this);
+            });
+        }(jQuery));
+    </script>
+{% endblock %}

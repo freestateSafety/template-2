@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin">
+
+        <h1>Fulfilled Orders</h1>
+        {% if not app.request.query.has('year') and not app.request.query.has('month') %}
+        <p>
+            The last 3 months of orders are displayed in the list below.<br>
+            To see order older than what is displayed, use the search form.
+        </p>
+        {% else %}
+        <p><a href="{{ path("admin_orders_fulfilled") }}">Clear Search</a></p>
+        {% endif %}
+
+        <br>
+
+        <div class="table-top">
+            <form method="get" action="{{ path('admin_orders_fulfilled') }}" class="right">
+                <div>
+                    <select id="month" name="month">
+                        {% for m in 1..12 %}
+                            {% set date = m ~ "/1/" ~ "now"|date("Y") %}
+                            <option value="{{ date|date("m") }}"{% if month == date|date("m") %} selected{% endif %}>
+                                {{ date|date("F") }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <select id="year" name="year">
+                        {% for y in "now"|date("Y")..2011 %}
+                            {% set date = "1/1/" ~ y %}
+                            <option value="{{ date|date("Y") }}"{% if year == date|date("Y") %} selected{% endif %}>{{ date|date("Y") }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" id="submitBtn" name="submitBtn" class="button">Find</button>
+                </div>
+            </form>
+        </div>
+
+        <table class="data-table">
+            {% if app.request.query.has("month") and app.request.query.has("year") %}
+                <thead>
+                    <tr class="order-date">
+                        <th colspan="7">
+                            <b>{{ (month ~ "/1/" ~ year)|date("F") }} {{ year }}</b>
+                        </th>
+                    </tr>
+                </thead>
+            {% endif %}
+            <thead>
+            <tr>
+                <th></th>
+                <th class="t-align-center"><b>Order&nbsp;#</b></th>
+                <th class="t-align-left" nowrap=""><b>Company</b></th>
+                <th class="t-align-left" nowrap=""><b>Customer</b></th>
+                <th class="t-align-center"><b>Order&nbsp;Date</b></th>
+                <th class="t-align-center"><b>Order&nbsp;Time</b></th>
+                <th class="t-align-left"><b>Totals</b></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if orders != null %}
+                {% for order in orders %}
+                    {% include 'fragments/order-list-item.html.twig' %}
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="7" class="space_xs_p-a-md">No orders have been fulfilled</td></tr>
+            {% endif %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}

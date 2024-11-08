@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal">
+
+        <h1>Select Shipping Options</h1>
+        <p class="space_xs_m-b-lg">Please select how to ship your order</p>
+
+        {% if error is defined %}
+            <div id="errorBlock" class="flex-grid flex-align-center   space_xs_m-b-lg color-error ">
+                <span class="space_xs_m-l-sm color-error ">{{ error }}</span>
+            </div>
+        {% endif %}
+
+        {% if rates %}
+
+        <form method="post" name="shippingOption" id="shippingOption" action="{{ path('cart_shipping') }}">
+            <input type="hidden" id="shipCost" name="shipCost" value="">
+
+            <div class="flex-grid ">
+                <div id="shippingBlock" class="flex-grid__col-xs-12 flex-grid__col-md-6">
+
+                    <label for="shippingToLocation"><b>Prices calculated for shipping to:</b></label>
+
+                    <select id="shippingToLocation" name="shippingAddress" class="space_xs_m-b-lg">
+                        {% for address in shippingAddress %}
+                            <option value="{{ address.id }}"{% if address.id == current.id %} selected="selected"{% endif %}>{{ address|nl2br }}</option>
+                        {% endfor %}
+                        {# 
+                        ## remove option to add a shipping address inline - Eric ##
+                        <option id="addNewAddress" value="addNewAddress">Add new shipping address</option> #}
+                    </select>
+
+                    {# 
+                    <div id="addNewShipOptions" class="hidden">
+                        {% include 'fragments/address.html.twig' with {'form': shippingAddressForm, 'addressType': 'shipping'} %}
+                        {{ form_row(shippingAddressForm._token) }}
+                        <div class="formRow">
+                            <div class="leftLabel"></div>
+                            <div class="rightForm">
+                                <input type="button" id="addShippingAddressBtn" name="addShippingAddressBtn" value="Add Address" class="button btnSubmit">
+                            </div>
+                        </div>
+                    </div> 
+                    #}
+
+                    
+                    {% include 'fragments/ups-rate-list.html.twig' %}
+
+                    <div>
+                        <br>
+                        <a class="btn-container" href="{{ path('cart') }}">
+                            <button type="button" class="button button-secondary">Back to Cart</button>
+                        </a>
+                        <button type="submit" id="submitBtn" name="submitBtn" class="button  ">Continue</button>
+                    </div>
+
+                </div>
+                <div class="flex-grid__col-xs-12 flex-grid__col-md-1"></div>
+                <div id="UPSmap" class="flex-grid__col-xs-12 flex-grid__col-md-5">
+                    <b>UPS Ground - Time in Transit map</b><br>
+                    <img id="upsImage" class="ups-image" src="{{ asset('images/UPS_transit_map.png') }}" border="0">
+                </div>
+
+            </div>
+        </form>
+        
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $("input[name='shipType']").change(function(){
+                var shippingCost = $(this).attr("data-cost");
+                //console.log("change shipping selection --> cost: " + shippingCost);
+                $("#shipCost").val( shippingCost );
+            });
+            $('#shippingToLocation').change(function () {
+                console.log("shipping option changed");
+                var thisVal = $(this).val();
+                $("input[name='shipType']").prop('checked', false).attr('disabled', true);
+                $("#customShipOptions").addClass("hidden");
+                if (thisVal === "addNewAddress"){
+                    $("#addNewShipOptions").removeClass('hidden');
+                    $("#shippingAddress").removeClass("hidden");
+                } else {
+                    $("#addNewShipOptions").appendTo('#contentInternal').addClass("hidden");
+                    var form = $('<form>');
+                    $(document.body).append(form);
+                    $(form).attr('method', 'get').html($('<input>').attr('name', 'shippingAddress').val($(this).val())).submit(); 
+                    $("#shippingAddress").addClass("hidden");  
+                }
+            });
+
+            $('#addShippingAddressBtn').click(function () {
+                var shippingAddress = {}, elements = $('#addNewShipOptions').find('[name^=addressShipping]');
+
+                $('#addNewShipOptions .error').remove();
+                $(elements).each(function () {
+                    shippingAddress[$(this).attr('name')] = $(this).val();
+                });
+
+                $.post('{{ path('cart_shipping') }}', shippingAddress, function (data, textStatus, xhr) {
+                    if (data.error) {
+                        if (data.error.global.length) {
+                            $('#addNewShipOptions').prepend(
+                                $('<div></div>').addClass('error').html(data.error.global.join('<br>'))
+                            );
+                        }
+                        
+                        for (var field in data.error.fields) {
+                            if (!data.error.fields.hasOwnProperty(field)) continue;
+                            $(elements).filter('[id$='+field+']').parent().append(
+                                $('<div></div>').addClass('error').html(data.error.fields[field].join('<br>'))
+                            );
+                        }
+                        return;
+                    }
+
+                    $('#addNewAddress').before(
+                        $('<option></option>').val(data.address.id).text(data.address.text)
+                    );
+                    $('#shippingToLocation').val(data.address.id);
+                    $('#shipTable').replaceWith(data.html);
+                    $('#addNewShipOptions').appendTo('#contentInternal').addClass('hidden');
+                    $(elements).each(function () {
+                        if ($(this).attr('name').match(/_token/)) return;
+                        $(this).val('');
+                    });
+                });
+            });
+        })
+    </script>
+{% endblock %}

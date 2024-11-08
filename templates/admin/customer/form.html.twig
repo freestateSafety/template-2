@@ -1,0 +1,179 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    <div id="contentInternal" class="content-internal admin ">
+
+        {% if customer.id is not null %}
+        <h2>User Information</h2>
+        {% else %}
+        <h2>Create User</h2>
+        {% endif %}
+
+        <br>
+
+        {% if customer.id is not null %}
+
+        <form name="orderInfo" action="{{ path('admin_customer_save', {'id': customer.id}) }}" method="post">
+            <input type="hidden" name="_method" value="PUT">
+
+        {% else %}
+
+        <form action="{{ path('admin_customer_create_save') }}" method="post">
+
+        {% endif %}
+            {{ form_row(billingForm._token) }}
+            {{ form_row(customerForm._token) }}
+            {{ form_row(shippingForm._token) }}
+
+            <table class="data-table" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td colspan="2" align="center">
+                        <h3>Contact Information</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="t-align-right">First Name <span>*</span></td>
+                    <td>{{ form_widget(customerForm.firstName) }}</td>
+                </tr>
+                <tr>
+                    <td class="t-align-right">Last Name <span>*</span></td>
+                    <td>{{ form_widget(customerForm.lastName) }}</td>
+                </tr>
+                <tr>
+                    <td class="t-align-right">Company</td>
+                    <td>{{ form_widget(customerForm.company) }}</td>
+                </tr>
+                <tr>
+                    <td class="t-align-right">Phone <span>*</span></td>
+                    <td>{{ form_widget(customerForm.phone) }}</td>
+                </tr>
+                <tr>
+                    <td class="t-align-right">Email <span>*</span></td>
+                    <td>{{ form_widget(customerForm.email) }}</td>
+                </tr>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    {% if customerForm.plainPassword is defined %}
+                <tr>
+                    <td class="t-align-right">Password <span>*</span></td>
+                    <td>{{ form_widget(customerForm.plainPassword.first) }}</td>
+                </tr>
+                <tr>
+                    <td class="t-align-right">Confirm Password <span>*</span></td>
+                    <td>{{ form_widget(customerForm.plainPassword.second) }}</td>
+                </tr>
+                    {% endif %}
+                <tr>
+                    <td class="t-align-right">Role</td>
+                    <td>{{ form_widget(customerForm.role) }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td colspan="2" align="center">
+                        <h4>Billing Address</h4>
+                    </td>
+                </tr>
+
+            {% if customer.addressesBilling.first %}
+                    <tr>
+                        <td class="t-align-right">Address <span>*</span></td>
+                        <td>{{ form_widget(billingForm.addressLine1) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="t-align-right"></td>
+                        <td>{{ form_widget(billingForm.addressLine2) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="t-align-right">City <span>*</span></td>
+                        <td>{{ form_widget(billingForm.city) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="t-align-right">State <span>*</span></td>
+                        <td>{{ form_widget(billingForm.state) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="t-align-right">Zip <span>*</span>
+                        </td>
+                        <td>{{ form_widget(billingForm.zip) }}</td>
+                    </tr>
+            {% else %}
+                    <tr>
+                        <td>Billing information was not returned from
+                            the
+                            database
+                        </td>
+                    </tr>
+            {% endif %}
+
+                <tr>
+                    <td colspan="2" align="center">
+                        <h4>Shipping Address</h4>
+                    </tdc>
+                </tr>
+
+            {% if customer.addressesShipping.first %}
+                    <tr>
+                        <td class="t-align-right">Address <span color="#FF0000">*</span></td>
+                        <td>{{ form_widget(shippingForm.addressLine1) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="t-align-right"></td>
+                        <td>{{ form_widget(shippingForm.addressLine2) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="t-align-right">City <span color="#FF0000">*</span></td>
+                        <td>{{ form_widget(shippingForm.city) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="t-align-right">State <span color="#FF0000">*</span></td>
+                        <td>{{ form_widget(shippingForm.state) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="t-align-right">Zip <span color="#FF0000">*</span>
+                        </td>
+                        <td>{{ form_widget(shippingForm.zip) }}</td>
+                    </tr>
+            {% else %}
+                    <tr>
+                        <td >Shipping information was not returned from the database</td>
+                    </tr>
+            {% endif %}
+            </table>
+
+            <div class="t-align-right">
+                {% if app.user != customer and customer.id is not null %}
+                <button type="button" id="delete" class="button button-secondary">Delete</button>
+                {% endif %}
+                <button type="submit" class="button">Save</button>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+        function setShipValues() {
+            document.orderInfo.ship_address1.value = document.orderInfo.bill_address1.value;
+            document.orderInfo.ship_address2.value = document.orderInfo.bill_address2.value;
+            document.orderInfo.ship_city.value = document.orderInfo.bill_city.value;
+            document.orderInfo.ship_state.value = document.orderInfo.bill_state.value;
+            document.orderInfo.ship_zip.value = document.orderInfo.bill_zip.value;
+        }
+
+        {% if customer.id is not null %}
+        (function ($) {
+            $('#delete').click(function () {
+                if (!confirm('Are you sure you want to delete this user?')) return;
+                
+                var form = $('<form></form>');
+                $(document.body).append($(form));
+                $(form).attr('method','post').attr('action', '{{ path('admin_customer_delete', {'id': customer.id}) }}')
+                        .html($('<input>').attr('type', 'hidden').attr('name', '_method').val('DELETE'))
+                        .submit();
+            });
+        }(jQuery));
+        {% endif %}
+    </script>
+{% endblock %}

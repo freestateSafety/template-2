@@ -1,0 +1,64 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    # secret key
+    secret.key:     "%env(SECRET_KEY)%"
+    # uploads
+    uploads_dir:     "%kernel.project_dir%/public/uploads/"
+
+    # email address to send all orders to
+    order_email:    orders@freestatesafety.com
+    contact_email:  orders@freestatesafety.com
+    # This is the SMTP server email address we must send email as
+    smtp_email:     orders@freestatesafety.com
+    
+    # Site configuration
+    site.name:      FreeState Safety
+    site.phone:     913-837-3966
+    site.ph-short:  9138373966
+    site.street:    608 South Metcalf Rd
+    site.city:      Louisburg
+    site.state:     KS
+    site.zip:       66053
+    site.domain:    freestatesafety.com
+    site.logo:      images/freestate_curl_final.png
+    site.banner.normal: images/red-bridge.jpg
+    site.banner.small:  images/email_banner.jpg
+    site.banner.email:  images/email_banner.jpg
+    site.id:        logo_FreestateSafety
+    site.landing:   ~
+
+    # UPS credentials
+    ups.api.address:        https://onlinetools.ups.com
+    ups.client.id:          "%env(UPS_CLIENT_ID)%"
+    ups.client.secret:      "%env(UPS_CLIENT_SECRET)%"
+    ups.shipper.addressee:  FreeState Safety
+    ups.shipper.street:     608 South Metcalf Rd
+    ups.shipper.city:       Louisburg
+    ups.shipper.state:      KS
+    ups.shipper.zip:        66053
+    ups.shipper.country:    US
+    ups.shipper.number:     xxxxxx
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    app.handler.auth:
+        class: App\Handler\AuthenticationHandler

@@ -1,0 +1,120 @@
+{% extends 'admin/products/base.html.twig' %}
+
+{% block admin_body %}
+    
+    <div id="pagingContainer" class="paging-containter space__m-b-lg">
+        <div class="flex-grid space_xs_m-b-lg">
+            <div  class="paging flex-grow ">
+                {% if pages|length > 1 %}
+                    <b>Pages: </b>
+                    {% for i in range(1, pages|length) %}
+                        {% if loop.index == 1 %}
+                            <a href="#" class="page page-link{{ loop.index }} active"
+                            data-index="{{ loop.index }}">{{ loop.index }}</a>
+                        {% else %}
+                            <a href="#" class="page page-link{{ loop.index }}"
+                            data-index="{{ loop.index }}">{{ loop.index }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <a href="{{ path('admin_products_create', {parent_id: currentCategory.id, id: currentSubCategory.id}) }}">
+                <button class="button button-secondary">Add New Product</button>
+            </a>
+            <button id="moveProductsBtn" class="button button-secondary">Move All Products</button>
+        </div>
+    </div>
+
+    {% for page in pages %}
+        <div id="page{{ loop.index }}" class="product-paging ">
+            <div class="product-list">
+            {% for product in page %}
+                <div id="{{ product.id }}" class="product-container">
+                    <div class="product-detail">
+                        <h4 class="heading size-h6">
+                            <a href="{{ path('admin_products_update', {id: product.id}) }}"><span>{{ product.name }}</span></a>
+                        </h4>
+                        <div class="price ">
+                            <span class="label">Price:</span>
+                            <span class="nowrap price">${{ product.price }}</span>
+                        </div>
+                        <div class="image-container">
+                            <a class="image-link linkToProduct" href="{{ path('admin_products_update', {id: product.id}) }}">
+                                <img class="image" src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.name }}">
+                            </a>
+                        </div>
+                        <div class="detail space_xs_p-b-sm">
+                            <span class="label">Item Number:</span>
+                            <span class="nowrap prod-id">{{ product.itemNumber }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div id="productOverlay">
+        <h2>Move Products</h2>
+        <p>Move all products from {{ currentCategory.label }} - {{ currentSubCategory }} to a new category</p>
+        <form method="post">
+            <div class="formRow">
+                <label for="new_category">Category</label>
+                <select id="new_category" name="category">
+                    {% set subCategories = null %}
+                    {% for category in categories().findBy({'parent': null}) %}
+                        {% if loop.index0 == 0 %}{% set subCategories = category.subCategories %}{% endif %}
+                        <option value="{{ category.id }}">{{ category.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="formRow">
+                <label for="new_sub_category">Sub Category</label>
+                <select id="new_sub_category" name="new_category">
+                    {% for category in subCategories %}
+                        <option value="{{ category.id }}">{{ category.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="button btnSubmit">Move Products</button>
+        </form>
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('a.page').click(function () {
+                var page = $(this).data('index');
+                event.preventDefault();
+                console.log("--> changePage("+page+")");
+                $("a.page").removeClass("active");
+                $("a.page-link"+page).addClass("active");
+                $("div.product-paging").hide();
+                $("div#page" + page ).fadeIn();
+            });
+            $("div.product-paging:first").show();
+
+            $('select#new_category').change(function () {
+                $.getJSON('{{ url('admin_products_categories') }}/' + $(this).val(), function (categories) {
+                    var select = $('#new_sub_category');s
+
+                    $(select).html(''); // Clear old categories
+                    $(categories).each(function (key, category) {
+                        $(select).append($('<option></option>').attr('value', category.id).text(category.label));
+                    });
+                });
+            });
+            $('#moveProductsBtn').click(function () {
+                console.log('moving products');
+                $('div#productOverlay').modal({
+                    autoPosition: true,
+                    overlayClose: true
+                });
+            });
+        });
+    </script>
+{% endblock %}
